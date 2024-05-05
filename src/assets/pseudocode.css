@@ -1,0 +1,85 @@
+:root {
+    --pseudo-fg-muted: #808080;
+    --pseudo-fg-slightly-muted: #363636;
+}
+
+code.pseudocode {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+
+    margin: var(--default-spacing) 0;
+
+    div {
+        display: inline-block;
+    }
+
+    /* >.locGutter.isUnfolded .doesFold {
+        opacity: 0%;
+    } */
+
+    >.locGutter {
+        text-align: right;
+        padding-left: 0.2em;
+        color: var(--pseudo-fg-muted);
+        transition: color 0.3s ease-in-out;
+
+        >.lineNumber {
+            >a {
+                text-decoration: none;
+            }
+        }
+
+        >.fold {
+            width: 1.2em;
+            text-align: center;
+            opacity: 0%;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        >.doesFold {
+            cursor: pointer;
+        }
+    }
+
+    >.locGutter:hover {
+        color: var(--pseudo-fg-slightly-muted);
+    }
+
+    >.locContent>.indent {
+        width: 2em;
+        border-left: solid 1px var(--pseudo-fg-muted);
+    }
+
+    background-color: rgba(0, 0, 0, 0.01);
+
+    > :is(div:nth-child(4n + 1), div:nth-child(4n + 2)) {
+        background-color: rgba(0, 0, 0, 0.03);
+    }
+
+    > :is(.locGutter, .locContent).isFolded {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    >.locGutter.isFolded {
+        border-left: solid 2px var(--pseudo-fg-slightly-muted);
+    }
+
+    >.locContent .unfoldButton {
+        cursor: pointer;
+        color: solid 3px var(--pseudo-fg-slightly-muted);
+        padding-left: 0.2em;
+        font-weight: bold;
+    }
+
+    >.locContent.isUnfolded .unfoldButton {
+        display: none;
+    }
+}
+
+code.pseudocode.noLineNumbers>.locGutter>.lineNumber {
+    display: none;
+}
+
+:is(code.pseudocode.hoveredGutter>.locGutter.isUnfolded, code.pseudocode>.locGutter.isFolded) .doesFold {
+    opacity: 100%;
+}
