@@ -1,6 +1,10 @@
+/*
+macromania_pseudocode
+*/
+
 :root {
     --pseudo-fg-muted: #808080;
-    --pseudo-fg-slightly-muted: #363636;
+    --pseudo-fg-slightly-muted: #454545;
 }
 
 code.pseudocode {
@@ -12,10 +16,6 @@ code.pseudocode {
     div {
         display: inline-block;
     }
-
-    /* >.locGutter.isUnfolded .doesFold {
-        opacity: 0%;
-    } */
 
     >.locGutter {
         text-align: right;
@@ -82,4 +82,34 @@ code.pseudocode.noLineNumbers>.locGutter>.lineNumber {
 
 :is(code.pseudocode.hoveredGutter>.locGutter.isUnfolded, code.pseudocode>.locGutter.isFolded) .doesFold {
     opacity: 100%;
+}
+
+/*
+macromania_structuredcode
+*/
+
+.pseudocode .rb0 {
+    color: #0431fa;
+}
+
+.pseudocode .rb1 {
+    color: #319331;
+}
+
+.pseudocode .rb2 {
+    color: #7b3814;
+}
+
+.pseudocode .docComment {
+    border-left: dotted var(--pseudo-fg-muted) 2px;
+    padding-left: calc(2ch - 2px);
+    color: var(--pseudo-fg-slightly-muted);
+
+    p:first-child {
+        margin-top: 0;
+    }
+
+    p:last-child {
+        margin-bottom: 0;
+    }
 }
