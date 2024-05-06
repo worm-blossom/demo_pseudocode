@@ -1,13 +1,22 @@
 import {
   A,
+  ArrayType,
   B,
+  ChoiceType,
   Code,
   Config,
   ConfigPseudocode,
   ConfigStructuredcode,
   Context,
   Counter,
+  Deemph,
   Def,
+  DefField,
+  DefFunction,
+  DefInterface,
+  DefType,
+  DefValue,
+  DefVariant,
   Delimited,
   Delimiters,
   DocComment,
@@ -15,9 +24,12 @@ import {
   EscapeHtml,
   Expression,
   Expressions,
+  FunctionType,
+  FunctionTypeNamed,
   H,
   Hsection,
   Indent,
+  Keyword,
   Li,
   Loc,
   M,
@@ -27,6 +39,8 @@ import {
   MM,
   Ol,
   P,
+  Parens,
+  PointerType,
   Pre,
   PreviewScope,
   Pseudocode,
@@ -39,9 +53,13 @@ import {
   Rsb,
   Sidenote,
   Sidenotes,
+  SliceType,
   Span,
   SpliceLoc,
   Strong,
+  TupleType,
+  TypeApplication,
+  TypeApplicationRaw,
   Ul,
   WaitForMarginales,
 } from "../deps.ts";
@@ -64,7 +82,7 @@ const exp = (
           {" "}
           package offers mid-level functionality for rendering structured code,
           such as matching delimiters and blocks. Finally, the{" "}
-          <Code>macromania_rusticcode</Code>{" "}
+          <Code>macromania_rustic</Code>{" "}
           provides an opinionated, high-level interface for converting abstract
           syntax trees of a Rust-like pseudo-language into rendered pseudocode.
         </P>
@@ -307,7 +325,7 @@ const exp = (
         </Loc>
       </Pseudocode>
 
-      <Config options={[<ConfigStructuredcode delimiterStyle="c"/>]}>
+      <Config options={[<ConfigStructuredcode delimiterStyle="c" />]}>
         <P>Single line, C-style.</P>
 
         <Pseudocode n="delimitedSinglelineC" lineNumbering>
@@ -342,7 +360,7 @@ const exp = (
         </Pseudocode>
       </Config>
 
-      <Config options={[<ConfigStructuredcode delimiterStyle="ruby"/>]}>
+      <Config options={[<ConfigStructuredcode delimiterStyle="ruby" />]}>
         <P>Single line, Ruby-style.</P>
 
         <Pseudocode n="delimitedSinglelineRuby" lineNumbering>
@@ -382,15 +400,294 @@ const exp = (
       </P>
 
       <Pseudocode n="docComment" lineNumbering>
-        <DocComment>Bla bla bla <Em>blubb</Em> bla bla.</DocComment>
+        <DocComment>
+          Bla bla bla <Em>blubb</Em> bla bla.
+        </DocComment>
+        <Loc>
+          let x = 17;
+        </Loc>
+        <DocComment>
+          <P>
+            Bla bla bla <Em>blubb</Em> bla bla.
+          </P>
+          <P>Plip plop plang!</P>
+        </DocComment>
+        <Loc>
+          x = 18;
+        </Loc>
+      </Pseudocode>
+
+      <P>
+        The <Code>Keyword</Code> macro renders a keyword, the{" "}
+        <Code>Deemph</Code> macro deemphasises its contents.
+      </P>
+
+      <Pseudocode n="keyword" lineNumbering>
+        <Loc>
+          <Keyword>return</Keyword>
+        </Loc>
+        <Loc>
+          <Deemph>;</Deemph>
+        </Loc>
+      </Pseudocode>
+    </Hsection>
+
+    <Hsection
+      n="highlevel"
+      title="High-level Macros — Rustic"
+    >
+      <P>
+        The <Code>macromania_rustic</Code>{"  "}
+        package provides opinionated high-level facilities for writing
+        pseudocode. It not only provides statements and expressions, but also
+        type definitions and interfaces (though none of them get typechecked).
+        The level of expressivity of the pseudo-type system corresponds roughly
+        to that of Rust without lifetimes.
+      </P>
+
+      <P>
+        The API is rather extensive, so we split it into four groups:{" "}
+        <R n="inlineTypes">type operators</R>,{" "}
+        <R n="inlineExpressions">expressions</R>,{" "}
+        <R n="rusticStatements">statements</R>, and{" "}
+        <R n="rusticItems">items</R>.
+      </P>
+
+      <PreviewScope>
+        <P>
+          Rustic is integrated with DefRef, and creates definitions of several
+          kinds: values, functions, types, fields, enum variants, and
+          interfaces. For each of these, there is a macro to manually create
+          these kinds of definitions: <DefValue n="some_value" />,{" "}
+          <DefFunction n="some_function" />, <DefType n="SomeType" />,{" "}
+          <DefField n="some_field" />, <DefVariant n="SomeVariant" />, and{" "}
+          <DefInterface n="SomeInterface" />.
+        </P>
+      </PreviewScope>
+
+      <P>
+        You can reference these definitions anywhere: in body text, in
+        pseudocode, and in code comments. <R n="some_value" />,{" "}
+        <R n="some_function" />, <R n="SomeType" />, <R n="some_field" />,{" "}
+        <R n="SomeVariant" />, <R n="SomeInterface" />.
+      </P>
+
+      <Pseudocode n="refs" lineNumbering>
+        <DocComment>
+          Lorem ipsum <R n="some_value" />{" "}
+          sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+          incididunt ut labore et <R n="some_function" />{" "}
+          magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+          ullamco <R n="SomeType" />{" "}
+          nisi ut aliquip ex ea commodo consequat. Duis aute irure{" "}
+          <R n="some_field" /> in reprehenderit in voluptate velit esse cillum
+          {" "}
+          <R n="SomeVariant" />{" "}
+          eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est{" "}
+          <R n="SomeInterface" />.
+        </DocComment>
+        <Loc>
+          <R n="some_value" />, <R n="some_function" />, <R n="SomeType" />,
+          {" "}
+          <R n="some_field" />, <R n="SomeVariant" />, <R n="SomeInterface" />
+        </Loc>
+      </Pseudocode>
+
+      <Hsection n="inlineTypes" title="Type Operators">
+        <P>Tuple types, i.e., anonymous product types:</P>
+
+        <Pseudocode n="tupleTypes" lineNumbering>
           <Loc>
-            let x = 17;
+            <TupleType />
           </Loc>
-          <DocComment><P>Bla bla bla <Em>blubb</Em> bla bla.</P><P>Plip plop plang!</P></DocComment>
           <Loc>
-            x = 18;
+            <TupleType types={["A"]} />
+          </Loc>
+          <Loc>
+            <TupleType types={["A", "B", "C"]} />
+          </Loc>
+          <Loc>
+            <TupleType types={["A", "B", "C"]} multiline />
           </Loc>
         </Pseudocode>
+
+        <P>Choice types, i.e., anonymous sum types:</P>
+
+        <Pseudocode n="sumTypes" lineNumbering>
+          <Loc>
+            <ChoiceType types={["A"]} />
+          </Loc>
+          <Loc>
+            <ChoiceType types={["A", "B", "C"]} />
+          </Loc>
+          <Loc>
+            <ChoiceType types={["A", "B", "C"]} multiline />
+          </Loc>
+        </Pseudocode>
+
+        <P>Function types, optionally with argument names:</P>
+
+        <Pseudocode n="functionTypes" lineNumbering>
+          <Loc>
+            <FunctionType args={[]} ret="Y" />
+          </Loc>
+          <Loc>
+            <FunctionType args={["A"]} ret="Y" />
+          </Loc>
+          <Loc>
+            <FunctionType args={["A", "B", "C"]} ret="Y" />
+          </Loc>
+          <Loc>
+            <FunctionType args={["A", "B", "C"]} ret="Y" multiline />
+          </Loc>
+          <DocComment>
+            When defining named arguments, the first value in the array is the
+            name to be displayed, the second is a unique identifier to pass to
+            DefRef, and the third value is the type of the argument.
+          </DocComment>
+          <Loc>
+            <FunctionTypeNamed
+              args={[["a", "functionTypesa1", "A"]]}
+              ret="Y"
+            />
+          </Loc>
+          <Loc>
+            <FunctionTypeNamed
+              args={[
+                ["foo", "functionTypesa2", "A"],
+                ["bar", "functionTypesb2", "B"],
+                ["baz", "functionTypesc2", "C"],
+              ]}
+              ret="Y"
+            />
+          </Loc>
+          <Loc>
+            <FunctionTypeNamed
+              args={[
+                ["foo", "functionTypesa3", "A"],
+                ["bar", "functionTypesb3", "B"],
+                ["baz", "functionTypesc3", "C"],
+              ]}
+              ret="Y"
+              multiline
+            />
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          Array types, i.e., sequences of known length containing values of the
+          same type:
+        </P>
+
+        <Pseudocode n="arrayTypes" lineNumbering>
+          <Loc>
+            <ArrayType inner={"A"} count="42" />
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          Pointer types, i.e., references to exactly one value of a certain type
+          (no null pointers in pseudo code, your readers deserve a type system
+          that makes sense):
+        </P>
+
+        <Pseudocode n="pointerTypes" lineNumbering>
+          <DocComment>
+            A pointer that can be read from but not written to.
+          </DocComment>
+          <Loc>
+            <PointerType inner={"A"} />
+          </Loc>
+          <DocComment>
+            A pointer that can be read from and written to.
+          </DocComment>
+          <Loc>
+            <PointerType inner={"A"} mut />
+          </Loc>
+          <DocComment>
+            A pointer that can be written to but not read from.
+          </DocComment>
+          <Loc>
+            <PointerType inner={"A"} mut="writeonly" />
+          </Loc>
+          <DocComment>
+            A pointer that can neither be read from nor written to.
+          </DocComment>
+          <Loc>
+            <PointerType inner={"A"} mut="opaque" />
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          Slice types, i.e., references to one or more values, consecutively
+          stored in memory:
+        </P>
+
+        <Pseudocode n="sliceTypes" lineNumbering>
+          <DocComment>
+            A slice that can be read from but not written to.
+          </DocComment>
+          <Loc>
+            <SliceType inner={"A"} />
+          </Loc>
+          <DocComment>A slice that can be read from and written to.</DocComment>
+          <Loc>
+            <SliceType inner={"A"} mut />
+          </Loc>
+          <DocComment>
+            A slice that can be written to but not read from.
+          </DocComment>
+          <Loc>
+            <SliceType inner={"A"} mut="writeonly" />
+          </Loc>
+          <DocComment>
+            A slice that can neither be read from nor written to.
+          </DocComment>
+          <Loc>
+            <SliceType inner={"A"} mut="opaque" />
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          Type applications, i.e., supplying parameters to a type constructor:
+        </P>
+
+        <Pseudocode n="typeApplications" lineNumbering>
+          <Loc>
+            <TypeApplicationRaw constr="List" args={["Foo"]} />
+          </Loc>
+          <Loc>
+            <TypeApplicationRaw constr="List" args={["Foo", "Bar", "Baz"]} />
+          </Loc>
+          <Loc>
+            <TypeApplicationRaw
+              constr="List"
+              args={["Foo", "Bar", "Baz"]}
+              multiline
+            />
+          </Loc>
+          <Loc>
+            <TypeApplication constr="SomeType" args={["Foo"]} />
+          </Loc>
+          <Loc>
+            <TypeApplication constr="SomeType" args={["Foo", "Bar", "Baz"]} />
+          </Loc>
+          <Loc>
+            <TypeApplication
+              constr="SomeType"
+              args={["Foo", "Bar", "Baz"]}
+              multiline
+            />
+          </Loc>
+        </Pseudocode>
+      </Hsection>
+
+      <Hsection n="inlineExpressions" title="Expressions"></Hsection>
+
+      <Hsection n="rusticStatements" title="Statements"></Hsection>
+
+      <Hsection n="rusticItems" title="Items"></Hsection>
     </Hsection>
   </ArticleTemplate>
 );
@@ -398,3 +695,20 @@ const exp = (
 // Evaluate the expression. This has exciting side-effects,
 // like creating a directory that contains a website!
 ctx.evaluate(exp);
+
+// slice types, type-level applications
+
+// tuples: literals, access
+// parens
+// type annotation
+// struct literal, record
+// enum literal
+// anonymous function (closure)
+// function application
+// array literal, repeated array literal
+// referencing and dereferencing
+// taking slices
+// lt, gt, lte, gte
+
+// primitive literals
+// identifiers

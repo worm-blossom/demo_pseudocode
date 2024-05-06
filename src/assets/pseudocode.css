@@ -11,6 +11,8 @@ code.pseudocode {
     display: grid;
     grid-template-columns: max-content 1fr;
 
+    text-align: left;
+
     margin: var(--default-spacing) 0;
 
     div {
@@ -64,6 +66,10 @@ code.pseudocode {
         border-left: solid 2px var(--pseudo-fg-slightly-muted);
     }
 
+    >.locContent {
+        padding-right: 0.2em;
+    }
+
     >.locContent .unfoldButton {
         cursor: pointer;
         color: solid 3px var(--pseudo-fg-slightly-muted);
@@ -88,21 +94,37 @@ code.pseudocode.noLineNumbers>.locGutter>.lineNumber {
 macromania_structuredcode
 */
 
+:root {
+    --rb0: #0431fa;
+    --rb1: #819331;
+    --rb2: #7b3814;
+    --kw: #268bd2;
+}
+
+.pseudocode .deemph {
+    color: var(--pseudo-fg-muted);
+}
+
 .pseudocode .rb0 {
-    color: #0431fa;
+    color: var(--rb0);
 }
 
 .pseudocode .rb1 {
-    color: #319331;
+    color: var(--rb1);
 }
 
 .pseudocode .rb2 {
-    color: #7b3814;
+    color: var(--rb2);
+}
+
+.pseudocode .kw {
+    color: var(--kw);
 }
 
 .pseudocode .docComment {
     border-left: dotted var(--pseudo-fg-muted) 2px;
-    padding-left: calc(2ch - 2px);
+    padding-left: calc(1ch - 2px);
+
     color: var(--pseudo-fg-slightly-muted);
 
     p:first-child {
@@ -112,4 +134,53 @@ macromania_structuredcode
     p:last-child {
         margin-bottom: 0;
     }
+}
+
+/*
+macromania_rustic
+*/
+
+:root {
+    /* Solarized https://ethanschoonover.com/solarized/ */
+    --sol-yellow: #b58900;
+    --sol-orange: #cb4b16;
+    --sol-red: #dc322f;
+    --sol-magenta: #d33682;
+    --sol-violet: #6c71c4;
+    --sol-blue: #268bd2;
+    --sol-cyan: #2aa198;
+    --sol-green: #859900;
+}
+
+
+.pseudocode [data-hl][data-preview-anchor]:is(.rustic) {
+    text-decoration: none;
+}
+
+.rustic {
+    font-family: var(--font-mono);
+}
+
+.rustic.value {
+    color: var(--sol-orange);
+}
+
+.rustic.type {
+    color: var(--sol-violet);
+}
+
+.rustic.function {
+    color: var(--sol-green);
+}
+
+.rustic.field {
+    color: var(--sol-magenta);
+}
+
+.rustic.variant {
+    color: var(--sol-yellow);
+}
+
+.rustic.interface {
+    color: var(--sol-cyan);
 }

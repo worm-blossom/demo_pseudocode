@@ -96,7 +96,7 @@ a[data-preview-anchor] {
   text-decoration-color: var(--main-subtle);
 }
 
-dfn>a {
+dfn>a[data-preview-anchor] {
   text-decoration: none;
 }
 
