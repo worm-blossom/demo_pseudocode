@@ -12,6 +12,7 @@ code.pseudocode {
     grid-template-columns: max-content 1fr;
 
     text-align: left;
+    font-size: 0.9rem;
 
     margin: var(--default-spacing) 0;
 
@@ -79,6 +80,10 @@ code.pseudocode {
 
     >.locContent.isUnfolded .unfoldButton {
         display: none;
+    }
+
+    [data-hl][data-preview-anchor] {
+        padding: 0;
     }
 }
 

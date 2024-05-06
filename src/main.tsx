@@ -1,5 +1,9 @@
 import {
   A,
+  Access,
+  AccessStruct,
+  AccessTuple,
+  And,
   ArrayType,
   B,
   ChoiceType,
@@ -21,17 +25,24 @@ import {
   Delimiters,
   DocComment,
   Em,
+  EnumLiteral,
+  EnumLiteralRaw,
   EscapeHtml,
   Expression,
   Expressions,
   FunctionType,
   FunctionTypeNamed,
+  Gt,
+  Gte,
   H,
   Hsection,
   Indent,
   Keyword,
+  Land,
   Li,
   Loc,
+  Lt,
+  Lte,
   M,
   makeFigureMacro,
   makeNumberingRenderer,
@@ -48,6 +59,7 @@ import {
   Rb,
   Rc,
   Rcb,
+  Record,
   RefLoc,
   Rs,
   Rsb,
@@ -57,7 +69,11 @@ import {
   Span,
   SpliceLoc,
   Strong,
+  Struct,
+  Tuple,
+  TupleStruct,
   TupleType,
+  TypeAnnotation,
   TypeApplication,
   TypeApplicationRaw,
   Ul,
@@ -75,16 +91,16 @@ const exp = (
     abstract={
       <>
         <P>
-          Three packages for writing pseudocode. The{" "}
-          <Code>macromania_pseudocode</Code>{" "}
+          Documentation for three Macromania packages for writing pseudocode.
+          The <Code>macromania_pseudocode</Code>{" "}
           package provides low-level functionality such as rendering line
           numbering and indentation. The <Code>macromania_structuredcode</Code>
           {" "}
           package offers mid-level functionality for rendering structured code,
           such as matching delimiters and blocks. Finally, the{" "}
           <Code>macromania_rustic</Code>{" "}
-          provides an opinionated, high-level interface for converting abstract
-          syntax trees of a Rust-like pseudo-language into rendered pseudocode.
+          provides an opinionated, high-level interface for rendering a
+          Rust-like pseudo-language.
         </P>
       </>
     }
@@ -582,7 +598,7 @@ const exp = (
 
         <Pseudocode n="arrayTypes" lineNumbering>
           <Loc>
-            <ArrayType inner={"A"} count="42" />
+            <ArrayType count="42">A</ArrayType>
           </Loc>
         </Pseudocode>
 
@@ -597,25 +613,25 @@ const exp = (
             A pointer that can be read from but not written to.
           </DocComment>
           <Loc>
-            <PointerType inner={"A"} />
+            <PointerType>A</PointerType>
           </Loc>
           <DocComment>
             A pointer that can be read from and written to.
           </DocComment>
           <Loc>
-            <PointerType inner={"A"} mut />
+            <PointerType mut>A</PointerType>
           </Loc>
           <DocComment>
             A pointer that can be written to but not read from.
           </DocComment>
           <Loc>
-            <PointerType inner={"A"} mut="writeonly" />
+            <PointerType mut="writeonly">A</PointerType>
           </Loc>
           <DocComment>
             A pointer that can neither be read from nor written to.
           </DocComment>
           <Loc>
-            <PointerType inner={"A"} mut="opaque" />
+            <PointerType mut="opaque">A</PointerType>
           </Loc>
         </Pseudocode>
 
@@ -629,23 +645,23 @@ const exp = (
             A slice that can be read from but not written to.
           </DocComment>
           <Loc>
-            <SliceType inner={"A"} />
+            <SliceType>A</SliceType>
           </Loc>
           <DocComment>A slice that can be read from and written to.</DocComment>
           <Loc>
-            <SliceType inner={"A"} mut />
+            <SliceType mut>A</SliceType>
           </Loc>
           <DocComment>
             A slice that can be written to but not read from.
           </DocComment>
           <Loc>
-            <SliceType inner={"A"} mut="writeonly" />
+            <SliceType mut="writeonly">A</SliceType>
           </Loc>
           <DocComment>
             A slice that can neither be read from nor written to.
           </DocComment>
           <Loc>
-            <SliceType inner={"A"} mut="opaque" />
+            <SliceType mut="opaque">A</SliceType>
           </Loc>
         </Pseudocode>
 
@@ -683,7 +699,234 @@ const exp = (
         </Pseudocode>
       </Hsection>
 
-      <Hsection n="inlineExpressions" title="Expressions"></Hsection>
+      <Hsection n="inlineExpressions" title="Expressions">
+        <P>Parentheses to clarify associativity:</P>
+
+        <Pseudocode n="parens" lineNumbering>
+          <Loc>
+            <Parens>
+              a +{" "}
+              <Parens>
+                <Parens>b + c</Parens> + d
+              </Parens>
+            </Parens>
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          Comparison operators, bitwise-and, and logical-and without manually
+          escaping html:
+        </P>
+
+        <Pseudocode n="comparisonOps" lineNumbering>
+          <Loc>
+            <Gt /> <Gte /> <Lt /> <Lte /> <And /> <Land />
+          </Loc>
+        </Pseudocode>
+
+        <P>Type annotations:</P>
+
+        <Pseudocode n="typeAnnotations" lineNumbering>
+          <Loc>
+            <TypeAnnotation type="Foo">foo</TypeAnnotation>
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          Tuple literals, optionally preceded by a name (emulating Rusts's tuple
+          structs):
+        </P>
+
+        <Pseudocode n="createTuples" lineNumbering>
+          <Loc>
+            <Tuple />
+          </Loc>
+          <Loc>
+            <Tuple fields={["a"]} />
+          </Loc>
+          <Loc>
+            <Tuple fields={["a", "b", "c"]} />
+          </Loc>
+          <Loc>
+            <Tuple fields={["a", "b", "c"]} multiline />
+          </Loc>
+          <Loc>
+            <Tuple name="Foo" />
+          </Loc>
+          <Loc>
+            <Tuple name="Foo" fields={["a"]} />
+          </Loc>
+          <Loc>
+            <Tuple name="Foo" fields={["a", "b", "c"]} />
+          </Loc>
+          <Loc>
+            <Tuple name="Foo" fields={["a", "b", "c"]} multiline />
+          </Loc>
+          <Loc>
+            <TupleStruct name="SomeType" />
+          </Loc>
+          <Loc>
+            <TupleStruct name="SomeType" fields={["a"]} />
+          </Loc>
+          <Loc>
+            <TupleStruct name="SomeType" fields={["a", "b", "c"]} />
+          </Loc>
+          <Loc>
+            <TupleStruct name="SomeType" fields={["a", "b", "c"]} multiline />
+          </Loc>
+        </Pseudocode>
+
+        <P>Tuple access:</P>
+
+        <Pseudocode n="accessTuples" lineNumbering>
+          <Loc>
+            <Access at="0">foo</Access>
+          </Loc>
+          <Loc>
+            <AccessTuple at={0}>foo</AccessTuple>
+          </Loc>
+        </Pseudocode>
+
+        <P>Record literals and struct literals:</P>
+
+        <Pseudocode n="recordStructLiterals" lineNumbering>
+          <Loc>
+            <Record />
+          </Loc>
+          <Loc>
+            <Record fields={[["a", "1"]]} />
+          </Loc>
+          <Loc>
+            <Record fields={[["a", "1"], ["b", "2"], ["c", "3"]]} />
+          </Loc>
+          <Loc>
+            <Record fields={[["a", "1"], ["b", "2"], ["c", "3"]]} multiline />
+          </Loc>
+          <Loc>
+            <Record name="Foo" />
+          </Loc>
+          <Loc>
+            <Record name="Foo" fields={[["a", "1"]]} />
+          </Loc>
+          <Loc>
+            <Record name="Foo" fields={[["a", "1"], ["b", "2"], ["c", "3"]]} />
+          </Loc>
+          <Loc>
+            <Record
+              name="Foo"
+              fields={[["a", "1"], ["b", "2"], ["c", "3"]]}
+              multiline
+            />
+          </Loc>
+
+          <Loc>
+            <Struct name="SomeType" />
+          </Loc>
+          <Loc>
+            <Struct name="SomeType" fields={[["some_field", "1"]]} />
+          </Loc>
+          <Loc>
+            <Struct
+              name="SomeType"
+              fields={[["some_field", "1"], ["some_field", "2"], [
+                "some_field",
+                "3",
+              ]]}
+            />
+          </Loc>
+          <Loc>
+            <Struct
+              name="SomeType"
+              fields={[["some_field", "1"], ["some_field", "2"], [
+                "some_field",
+                "3",
+              ]]}
+              multiline
+            />
+          </Loc>
+        </Pseudocode>
+
+        <P>Record access and struct access:</P>
+
+        <Pseudocode n="accessRecordsStructs" lineNumbering>
+          <Loc>
+            <Access at="0">foo</Access>
+          </Loc>
+          <Loc>
+            <AccessStruct field="some_field">foo</AccessStruct>
+          </Loc>
+        </Pseudocode>
+
+        <P>Qualified enum literals:</P>
+
+        <Pseudocode n="enumLiterals" lineNumbering>
+          <Loc>
+            <EnumLiteralRaw name="Foo">
+              <Tuple name="Bar" />
+            </EnumLiteralRaw>
+          </Loc>
+          <Loc>
+            <EnumLiteralRaw name="Foo">
+              <Tuple name="Bar" fields={["a", "b"]} />
+            </EnumLiteralRaw>
+          </Loc>
+          <Loc>
+            <EnumLiteralRaw name="Foo">
+              <Tuple name="Bar" fields={["a", "b"]} multiline />
+            </EnumLiteralRaw>
+          </Loc>
+          <Loc>
+            <EnumLiteralRaw name="Foo">
+              <Record name="Bar" fields={[["a", "1"], ["b", "2"]]} />
+            </EnumLiteralRaw>
+          </Loc>
+          <Loc>
+            <EnumLiteralRaw name="Foo">
+              <Record name="Bar" fields={[["a", "1"], ["b", "2"]]} multiline />
+            </EnumLiteralRaw>
+          </Loc>
+
+          <Loc>
+            <EnumLiteral name="SomeType">
+              <TupleStruct name="SomeVariant" />
+            </EnumLiteral>
+          </Loc>
+          <Loc>
+            <EnumLiteral name="SomeType">
+              <TupleStruct
+                name="SomeVariant"
+                fields={["a", "b"]}
+              />
+            </EnumLiteral>
+          </Loc>
+          <Loc>
+            <EnumLiteral name="SomeType">
+              <TupleStruct
+                name="SomeVariant"
+                fields={["a", "b"]}
+                multiline
+              />
+            </EnumLiteral>
+          </Loc>
+          <Loc>
+            <EnumLiteral name="SomeType">
+              <Struct
+                name="SomeVariant"
+                fields={[["some_field", "1"], ["some_field", "2"]]}
+              />
+            </EnumLiteral>
+          </Loc>
+          <Loc>
+            <EnumLiteral name="SomeType">
+              <Struct
+                name="SomeVariant"
+                fields={[["some_field", "1"], ["some_field", "2"]]}
+                multiline
+              />
+            </EnumLiteral>
+          </Loc>
+        </Pseudocode>
+      </Hsection>
 
       <Hsection n="rusticStatements" title="Statements"></Hsection>
 
@@ -696,19 +939,10 @@ const exp = (
 // like creating a directory that contains a website!
 ctx.evaluate(exp);
 
-// slice types, type-level applications
-
-// tuples: literals, access
-// parens
-// type annotation
-// struct literal, record
-// enum literal
-// anonymous function (closure)
+// anonymous fu                                                                                                                                                                                                                                  nction (closure)
 // function application
 // array literal, repeated array literal
 // referencing and dereferencing
 // taking slices
-// lt, gt, lte, gte
 
 // primitive literals
-// identifiers
