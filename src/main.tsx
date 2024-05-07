@@ -4,6 +4,10 @@ import {
   AccessStruct,
   AccessTuple,
   And,
+  Application,
+  ApplicationRaw,
+  ArrayLiteral,
+  ArrayRepeated,
   ArrayType,
   B,
   ChoiceType,
@@ -23,12 +27,15 @@ import {
   DefVariant,
   Delimited,
   Delimiters,
+  Deref,
   Em,
   EnumLiteral,
   EnumLiteralRaw,
   EscapeHtml,
   Expression,
   Expressions,
+  FunctionLiteral,
+  FunctionLiteralUntyped,
   FunctionType,
   FunctionTypeNamed,
   Gt,
@@ -36,7 +43,9 @@ import {
   H,
   Hsection,
   Indent,
+  Index,
   InlineComment,
+  IsVariant,
   Keyword,
   Land,
   Li,
@@ -60,11 +69,13 @@ import {
   Rc,
   Rcb,
   Record,
+  Reference,
   RefLoc,
   Rs,
   Rsb,
   Sidenote,
   Sidenotes,
+  Slice,
   SliceType,
   Span,
   SpliceLoc,
@@ -1380,6 +1391,530 @@ const exp = (
             </EnumLiteral>
           </Loc>
         </Pseudocode>
+
+        <P>
+          Testing whether an expression evaluates to a value of a certain enum
+          variant.
+        </P>
+
+        <Pseudocode n="isVariant" lineNumbering>
+          <Loc>
+            <IsVariant variant="Some">x</IsVariant>
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          Anonymous function literals, i.e., function expressions, closures,
+          lambda expressions:
+        </P>
+
+        <Pseudocode n="functionLiterals" lineNumbering>
+          <CommentLine>
+            When defining arguments for untyped function literals, the first
+            value in the array is the name to be displayed, and the second is a
+            unique identifier to pass to DefRef.
+          </CommentLine>
+          <Loc>
+            <FunctionLiteralUntyped
+              args={[["a", "functionLiteralUntypeda0"]]}
+              body={["return 4"]}
+              singleLineBody
+            />
+          </Loc>
+          <Loc>
+            <FunctionLiteralUntyped
+              args={[["a", "functionLiteralUntypeda1"]]}
+              body={["return 4"]}
+            />
+          </Loc>
+          <Loc>
+            <FunctionLiteralUntyped
+              args={[
+                ["a", "functionLiteralUntypeda2"],
+                {
+                  commented: {
+                    segment: ["b", "functionLiteralUntypedb2"],
+                    comment: "bla",
+                  },
+                },
+                {
+                  commented: {
+                    segment: ["c", "functionLiteralUntypedc2"],
+                    comment: "bli",
+                    dedicatedLine: true,
+                  },
+                },
+              ]}
+              body={["return 4"]}
+            />
+          </Loc>
+          <Loc>
+            <FunctionLiteralUntyped
+              args={[
+                ["a", "functionLiteralUntypeda3"],
+                {
+                  commented: {
+                    segment: ["b", "functionLiteralUntypedb3"],
+                    comment: "bla",
+                  },
+                },
+                {
+                  commented: {
+                    segment: ["c", "functionLiteralUntypedc3"],
+                    comment: "bli",
+                    dedicatedLine: true,
+                  },
+                },
+              ]}
+              body={["return 4"]}
+              multilineArgs
+            />
+          </Loc>
+          <CommentLine>
+            When defining arguments for typed function literals, the first value
+            in the array is the name to be displayed, the second is a unique
+            identifier to pass to DefRef, and the third is the type of the
+            argument.
+          </CommentLine>
+          <Loc>
+            <FunctionLiteral
+              args={[["a", "functionLiterala0", "A"]]}
+              body={["return 4"]}
+              singleLineBody
+            />
+          </Loc>
+          <Loc>
+            <FunctionLiteral
+              args={[["a", "functionLiterala1", "A"]]}
+              body={["return 4"]}
+            />
+          </Loc>
+          <Loc>
+            <FunctionLiteral
+              args={[["a", "functionLiterala01", "A"]]}
+              body={["return 4"]}
+              singleLineBody
+              ret="Number"
+            />
+          </Loc>
+          <Loc>
+            <FunctionLiteral
+              args={[["a", "functionLiterala11", "A"]]}
+              body={["return 4"]}
+              ret="Number"
+            />
+          </Loc>
+          <Loc>
+            <FunctionLiteral
+              args={[
+                ["a", "functionLiterala2", "A"],
+                {
+                  commented: {
+                    segment: ["b", "functionLiteralb2", "B"],
+                    comment: "bla",
+                  },
+                },
+                {
+                  commented: {
+                    segment: ["c", "functionLiteralc2", "C"],
+                    comment: "bli",
+                    dedicatedLine: true,
+                  },
+                },
+              ]}
+              body={["return 4"]}
+            />
+          </Loc>
+          <Loc>
+            <FunctionLiteral
+              args={[
+                ["a", "functionLiterala3", "A"],
+                {
+                  commented: {
+                    segment: ["b", "functionLiteralb3", "B"],
+                    comment: "bla",
+                  },
+                },
+                {
+                  commented: {
+                    segment: ["c", "functionLiteralc3", "C"],
+                    comment: "bli",
+                    dedicatedLine: true,
+                  },
+                },
+              ]}
+              body={["return 4"]}
+              multilineArgs
+            />
+          </Loc>
+
+          <Loc>
+            <FunctionLiteral
+              args={[
+                ["a", "functionLiterala21", "A"],
+                {
+                  commented: {
+                    segment: ["b", "functionLiteralb21", "B"],
+                    comment: "bla",
+                  },
+                },
+                {
+                  commented: {
+                    segment: ["c", "functionLiteralc21", "C"],
+                    comment: "bli",
+                    dedicatedLine: true,
+                  },
+                },
+              ]}
+              body={["return 4"]}
+              ret="Number"
+            />
+          </Loc>
+          <Loc>
+            <FunctionLiteral
+              args={[
+                ["a", "functionLiterala31", "A"],
+                {
+                  commented: {
+                    segment: ["b", "functionLiteralb31", "B"],
+                    comment: "bla",
+                  },
+                },
+                {
+                  commented: {
+                    segment: ["c", "functionLiteralc31", "C"],
+                    comment: "bli",
+                    dedicatedLine: true,
+                  },
+                },
+              ]}
+              body={["return 4"]}
+              multilineArgs
+              ret="Number"
+            />
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          Function applications:
+        </P>
+
+        <Pseudocode n="functionApplications" lineNumbering>
+          <Loc>
+            <ApplicationRaw fun="foo" />
+          </Loc>
+          <Loc>
+            <ApplicationRaw
+              fun="foo"
+              args={["a"]}
+            />
+          </Loc>
+          <Loc>
+            <ApplicationRaw
+              fun="foo"
+              args={["a", {
+                commented: {
+                  segment: "b",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "c",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+            />
+          </Loc>
+          <Loc>
+            <ApplicationRaw
+              fun="foo"
+              args={["a", {
+                commented: {
+                  segment: "b",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "c",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+              multilineArgs
+            />
+          </Loc>
+          <Loc>
+            <ApplicationRaw
+              fun="foo"
+              generics={["A"]}
+            />
+          </Loc>
+          <Loc>
+            <ApplicationRaw
+              fun="foo"
+              args={["a"]}
+              generics={["A"]}
+            />
+          </Loc>
+          <Loc>
+            <ApplicationRaw
+              fun="foo"
+              args={["a"]}
+              generics={["A", {
+                commented: {
+                  segment: "B",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "C",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+            />
+          </Loc>
+          <Loc>
+            <ApplicationRaw
+              fun="foo"
+              args={["a"]}
+              generics={["A", {
+                commented: {
+                  segment: "B",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "C",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+              multilineGenerics
+            />
+          </Loc>
+          <Loc>
+            <Application fun="some_function" />
+          </Loc>
+          <Loc>
+            <Application
+              fun="some_function"
+              args={["a"]}
+            />
+          </Loc>
+          <Loc>
+            <Application
+              fun="some_function"
+              args={["a", {
+                commented: {
+                  segment: "b",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "c",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+            />
+          </Loc>
+          <Loc>
+            <Application
+              fun="some_function"
+              args={["a", {
+                commented: {
+                  segment: "b",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "c",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+              multilineArgs
+            />
+          </Loc>
+          <Loc>
+            <Application
+              fun="some_function"
+              generics={["A"]}
+            />
+          </Loc>
+          <Loc>
+            <Application
+              fun="some_function"
+              args={["a"]}
+              generics={["A"]}
+            />
+          </Loc>
+          <Loc>
+            <Application
+              fun="some_function"
+              args={["a"]}
+              generics={["A", {
+                commented: {
+                  segment: "B",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "C",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+            />
+          </Loc>
+          <Loc>
+            <Application
+              fun="some_function"
+              args={["a"]}
+              generics={["A", {
+                commented: {
+                  segment: "B",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "C",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+              multilineGenerics
+            />
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          Array literals, explicit and via repitition:
+        </P>
+
+        <Pseudocode n="arrayLiterals" lineNumbering>
+          <Loc>
+            <ArrayLiteral />
+          </Loc>
+          <Loc>
+            <ArrayLiteral fields={["a"]} />
+          </Loc>
+          <Loc>
+            <ArrayLiteral
+              fields={["a", {
+                commented: {
+                  segment: "b",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "c",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+            />
+          </Loc>
+          <Loc>
+            <ArrayLiteral
+              fields={["a", {
+                commented: {
+                  segment: "b",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "c",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+              multiline
+            />
+          </Loc>
+          <Loc>
+            <ArrayRepeated repetitions="42">x</ArrayRepeated>
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          Indexing into arrays:
+        </P>
+
+        <Pseudocode n="indexArray" lineNumbering>
+          <Loc>
+            <Index index="4">foo</Index>
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          Taking references, i.e., creating pointers:
+        </P>
+
+        <Pseudocode n="takeReferences" lineNumbering>
+          <Loc>
+            <Reference>A</Reference>
+          </Loc>
+          <Loc>
+            <Reference mut>A</Reference>
+          </Loc>
+          <Loc>
+            <Reference mut="writeonly">A</Reference>
+          </Loc>
+          <Loc>
+            <Reference mut="opaque">A</Reference>
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          Dereferencing pointers:
+        </P>
+
+        <Pseudocode n="dereferencePointer" lineNumbering>
+          <Loc>
+            <Deref>A</Deref>
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          Taking slices, i.e., creating pointers to zero or more values:
+        </P>
+
+        <Pseudocode n="takeSlices" lineNumbering>
+          <Loc>
+            <Slice>A</Slice>
+          </Loc>
+          <Loc>
+            <Slice from="4">A</Slice>
+          </Loc>
+          <Loc>
+            <Slice to="7">A</Slice>
+          </Loc>
+          <Loc>
+            <Slice from="4" to="7">A</Slice>
+          </Loc>
+          <Loc>
+            <Slice mut>A</Slice>
+          </Loc>
+          <Loc>
+            <Slice mut="writeonly">A</Slice>
+          </Loc>
+          <Loc>
+            <Slice mut="opaque">A</Slice>
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          Indexing into slices:
+        </P>
+
+        <Pseudocode n="indexSlices" lineNumbering>
+          <Loc>
+            <Index index="4">foo</Index>
+          </Loc>
+        </Pseudocode>
       </Hsection>
 
       <Hsection n="rusticStatements" title="Statements"></Hsection>
@@ -1393,13 +1928,5 @@ const exp = (
 // like creating a directory that contains a website!
 ctx.evaluate(exp);
 
-// enum is expression
-// anonymous function (closure)
-// function application
-// array literal, repeated array literal
 // referencing and dereferencing
 // taking slices, dereferencing slices
-
-// primitive literals
-
-// Add line comments to Loc macro
