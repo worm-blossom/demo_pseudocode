@@ -5,6 +5,10 @@ macromania_pseudocode
 :root {
     --pseudo-fg-muted: #808080;
     --pseudo-fg-slightly-muted: #454545;
+    --rb0: #0431fa;
+    --rb1: #819331;
+    --rb2: #7b3814;
+    --kw: #268bd2; /* solarized-blue */
 }
 
 code.pseudocode {
@@ -13,6 +17,7 @@ code.pseudocode {
 
     text-align: left;
     font-size: 0.9rem;
+    justify-self: start;
 
     margin: var(--default-spacing) 0;
 
@@ -48,9 +53,45 @@ code.pseudocode {
         color: var(--pseudo-fg-slightly-muted);
     }
 
-    >.locContent>.indent {
-        width: 2em;
-        border-left: solid 1px var(--pseudo-fg-muted);
+    >.locContent {
+        display: inline-grid;
+        grid-template-columns: auto minmax(10ch, 1fr);
+
+        >div:first-child {
+            >.indent {
+                width: 4ch;
+                border-left: solid 1px var(--pseudo-fg-muted);
+            }
+        }
+
+        >div.comment, >div.lineComment {
+            border-left: dotted var(--pseudo-fg-muted) 2px;
+            color: var(--pseudo-fg-slightly-muted);
+            padding-left: calc(1ch - 2px);
+
+            p:first-child {
+                margin-top: 0;
+            }
+
+            p:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        >div.comment {
+            margin-left: 1ch;
+        }
+
+        /* padding-left: calc(1ch - 2px); */
+
+        .inlineComment {
+            border-left: dotted var(--pseudo-fg-muted) 2px;
+            border-right: dotted var(--pseudo-fg-muted) 2px;
+            padding-left: calc(1ch - 2px);
+            padding-right: calc(1ch - 2px);
+
+            color: var(--pseudo-fg-slightly-muted);
+        }
     }
 
     background-color: rgba(0, 0, 0, 0.01);
@@ -95,17 +136,6 @@ code.pseudocode.noLineNumbers>.locGutter>.lineNumber {
     opacity: 100%;
 }
 
-/*
-macromania_structuredcode
-*/
-
-:root {
-    --rb0: #0431fa;
-    --rb1: #819331;
-    --rb2: #7b3814;
-    --kw: #268bd2;
-}
-
 .pseudocode .deemph {
     color: var(--pseudo-fg-muted);
 }
@@ -124,21 +154,6 @@ macromania_structuredcode
 
 .pseudocode .kw {
     color: var(--kw);
-}
-
-.pseudocode .docComment {
-    border-left: dotted var(--pseudo-fg-muted) 2px;
-    padding-left: calc(1ch - 2px);
-
-    color: var(--pseudo-fg-slightly-muted);
-
-    p:first-child {
-        margin-top: 0;
-    }
-
-    p:last-child {
-        margin-bottom: 0;
-    }
 }
 
 /*

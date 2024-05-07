@@ -8,9 +8,9 @@ import {
   B,
   ChoiceType,
   Code,
+  CommentLine,
   Config,
   ConfigPseudocode,
-  ConfigStructuredcode,
   Context,
   Counter,
   Deemph,
@@ -23,7 +23,6 @@ import {
   DefVariant,
   Delimited,
   Delimiters,
-  DocComment,
   Em,
   EnumLiteral,
   EnumLiteralRaw,
@@ -37,6 +36,7 @@ import {
   H,
   Hsection,
   Indent,
+  InlineComment,
   Keyword,
   Land,
   Li,
@@ -94,11 +94,8 @@ const exp = (
           Documentation for three Macromania packages for writing pseudocode.
           The <Code>macromania_pseudocode</Code>{" "}
           package provides low-level functionality such as rendering line
-          numbering and indentation. The <Code>macromania_structuredcode</Code>
+          numbers, indentatin, and comments. The <Code>macromania_rustic</Code>
           {" "}
-          package offers mid-level functionality for rendering structured code,
-          such as matching delimiters and blocks. Finally, the{" "}
-          <Code>macromania_rustic</Code>{" "}
           provides an opinionated, high-level interface for rendering a
           Rust-like pseudo-language.
         </P>
@@ -198,6 +195,50 @@ const exp = (
       </Pseudocode>
 
       <P>
+        The <Code>Loc</Code>{" "}
+        macro optionally renders a comment at the end of the line.
+      </P>
+
+      <Pseudocode n="lineComments" lineNumbering>
+        <Loc comment="Short comment.">
+          Short line.
+        </Loc>
+        <Loc comment="Short comment.">
+          This line of code is so verbose that it needs a line break. I wonder
+          how the comment will render. Only one way to find out, I suppose. Is
+          this long enough yet? I think so.
+        </Loc>
+        <Loc comment="Bla.">
+          This line of code is so verbose that it needs a line break. I wonder
+          how the comment will render. Only one way to find out, I suppose. Is
+          this long enough yet? I think so.
+        </Loc>
+        <Loc comment="This comment is so verbose that it needs a line break. I wonder how the line of code will render. Only one way to find out, I suppose. Is this long enough yet? I think so.">
+          Short line.
+        </Loc>
+        <Loc comment="This comment is so verbose that it needs a line break. I wonder how the line of code will render. Only one way to find out, I suppose. Is this long enough yet? I think so.">
+          This line of code is so verbose that it needs a line break. I wonder
+          how the comment will render. Only one way to find out, I suppose. Is
+          this long enough yet? I think so.
+        </Loc>
+        <Loc comment="Comment in a line that contains no actual code."></Loc>
+        <CommentLine>
+          And a full-line comment using the dedicated macro.
+        </CommentLine>
+      </Pseudocode>
+
+      <P>
+        The <Code>InlineComment</Code> renders a comment inside a line of code.
+      </P>
+
+      <Pseudocode n="inlineComment" lineNumbering>
+        <Loc>
+          foo(bar <InlineComment>Yay!</InlineComment>, baz{" "}
+          <InlineComment>Nay!</InlineComment>)
+        </Loc>
+      </Pseudocode>
+
+      <P>
         The <Code>Indent</Code>{" "}
         macro provides indentation to the lines of code it contains.
       </P>
@@ -240,33 +281,6 @@ const exp = (
         </Loc>
       </Pseudocode>
 
-      <Hsection n="pseudocodeDefref" title="Referencing Pseudocode">
-        <P>
-          You can use the DefRef package to reference a code block{" "}
-          <R n="lineNumbering">like this</R>. The pseudocode package also
-          provides its own <Code>RefLoc</Code>{" "}
-          macro for referencing individual lines of code or a sequence of lines:
-          {" "}
-          <RefLoc n="indentation" lines={2}>line 2</RefLoc>,{" "}
-          <RefLoc n="indentation" lines={[3, 5]}>lines 3–5</RefLoc>, and{" "}
-          <RefLoc n="indentation" lines={{ many: [2, [4, 5], 7] }}>
-            lines 2, 4–5, and 7
-          </RefLoc>.
-        </P>
-      </Hsection>
-    </Hsection>
-    <Hsection
-      n="midlevel"
-      title="Mid-level Macros"
-    >
-      <P>
-        The <Code>macromania_structuredcode</Code>{"  "}
-        package provides mid-level facilities for rendering structured code. You
-        probably will not use it directly unless defining your own language
-        constructs. Still, cannot really hurt to learn what is going on under
-        the hood.
-      </P>
-
       <P>
         Use the <Code>Delimiters</Code> macro for matching pairs of delimiters.
       </P>
@@ -290,9 +304,9 @@ const exp = (
       <P>
         The <Code>Delimited</Code>{" "}
         macro is the bread-and-butter macro for structured code blocks. It wraps
-        some content expression in delimiters, optionally places separator in
-        between them, and optionally places each of them in its own, indented
-        line.
+        some content expressions in delimiters, optionally places separator in
+        between them, optionally comments any of them, and optionally places
+        each of them in their own, indented lines.
       </P>
 
       <P>
@@ -308,9 +322,9 @@ const exp = (
         Python-like, and Ruby-like.
       </P>
 
-      <P>Single line, Python-style.</P>
+      <P>Single line, C-style.</P>
 
-      <Pseudocode n="delimitedSinglelinePython" lineNumbering>
+      <Pseudocode n="delimitedSinglelineC" lineNumbering>
         <Loc>
           if true{" "}
           <Delimited
@@ -318,15 +332,23 @@ const exp = (
             c={["{", "}"]}
             pythonSkip
             ruby={["then", "endif"]}
-            content={["foo()", "bar()", "baz()"]}
+            content={["foo()", {
+              commented: { segment: "bar()", comment: "bla" },
+            }, {
+              commented: {
+                segment: "baz()",
+                comment: "bli",
+                dedicatedLine: true,
+              },
+            }]}
           />{" "}
           else foo;
         </Loc>
       </Pseudocode>
 
-      <P>Multiple lines, Python-style.</P>
+      <P>Multiple lines, C-style.</P>
 
-      <Pseudocode n="delimitedMultilinePython" lineNumbering>
+      <Pseudocode n="delimitedMultilineC" lineNumbering>
         <Loc>
           if true{" "}
           <Delimited
@@ -335,16 +357,24 @@ const exp = (
             c={["{", "}"]}
             pythonSkip
             ruby={["then", "endif"]}
-            content={["foo()", "bar()", "baz()"]}
+            content={["foo()", {
+              commented: { segment: "bar()", comment: "bla" },
+            }, {
+              commented: {
+                segment: "baz()",
+                comment: "bli",
+                dedicatedLine: true,
+              },
+            }]}
           />{" "}
           else foo;
         </Loc>
       </Pseudocode>
 
-      <Config options={[<ConfigStructuredcode delimiterStyle="c" />]}>
-        <P>Single line, C-style.</P>
+      <Config options={[<ConfigPseudocode delimiterStyle="python" />]}>
+        <P>Single line, Python-style.</P>
 
-        <Pseudocode n="delimitedSinglelineC" lineNumbering>
+        <Pseudocode n="delimitedSinglelinePython" lineNumbering>
           <Loc>
             if true{" "}
             <Delimited
@@ -352,15 +382,23 @@ const exp = (
               c={["{", "}"]}
               pythonSkip
               ruby={["then", "endif"]}
-              content={["foo()", "bar()", "baz()"]}
+              content={["foo()", {
+                commented: { segment: "bar()", comment: "bla" },
+              }, {
+                commented: {
+                  segment: "baz()",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
             />{" "}
             else foo;
           </Loc>
         </Pseudocode>
 
-        <P>Multiple lines, C-style.</P>
+        <P>Multiple lines, Python-style.</P>
 
-        <Pseudocode n="delimitedMultilineC" lineNumbering>
+        <Pseudocode n="delimitedMultilinePython" lineNumbering>
           <Loc>
             if true{" "}
             <Delimited
@@ -369,14 +407,22 @@ const exp = (
               c={["{", "}"]}
               pythonSkip
               ruby={["then", "endif"]}
-              content={["foo()", "bar()", "baz()"]}
+              content={["foo()", {
+                commented: { segment: "bar()", comment: "bla" },
+              }, {
+                commented: {
+                  segment: "baz()",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
             />{" "}
             else foo;
           </Loc>
         </Pseudocode>
       </Config>
 
-      <Config options={[<ConfigStructuredcode delimiterStyle="ruby" />]}>
+      <Config options={[<ConfigPseudocode delimiterStyle="ruby" />]}>
         <P>Single line, Ruby-style.</P>
 
         <Pseudocode n="delimitedSinglelineRuby" lineNumbering>
@@ -387,7 +433,15 @@ const exp = (
               c={["{", "}"]}
               pythonSkip
               ruby={["then", "endif"]}
-              content={["foo()", "bar()", "baz()"]}
+              content={["foo()", {
+                commented: { segment: "bar()", comment: "bla" },
+              }, {
+                commented: {
+                  segment: "baz()",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
             />{" "}
             else foo;
           </Loc>
@@ -404,34 +458,20 @@ const exp = (
               c={["{", "}"]}
               pythonSkip
               ruby={["then", "endif"]}
-              content={["foo()", "bar()", "baz()"]}
+              content={["foo()", {
+                commented: { segment: "bar()", comment: "bla" },
+              }, {
+                commented: {
+                  segment: "baz()",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
             />{" "}
             else foo;
           </Loc>
         </Pseudocode>
       </Config>
-
-      <P>
-        The <Code>DocComment</Code> macro renders a full-line comment.
-      </P>
-
-      <Pseudocode n="docComment" lineNumbering>
-        <DocComment>
-          Bla bla bla <Em>blubb</Em> bla bla.
-        </DocComment>
-        <Loc>
-          let x = 17;
-        </Loc>
-        <DocComment>
-          <P>
-            Bla bla bla <Em>blubb</Em> bla bla.
-          </P>
-          <P>Plip plop plang!</P>
-        </DocComment>
-        <Loc>
-          x = 18;
-        </Loc>
-      </Pseudocode>
 
       <P>
         The <Code>Keyword</Code> macro renders a keyword, the{" "}
@@ -446,8 +486,22 @@ const exp = (
           <Deemph>;</Deemph>
         </Loc>
       </Pseudocode>
-    </Hsection>
 
+      <Hsection n="pseudocodeDefref" title="Referencing Pseudocode">
+        <P>
+          You can use the DefRef package to reference a code block{" "}
+          <R n="lineNumbering">like this</R>. The pseudocode package also
+          provides its own <Code>RefLoc</Code>{" "}
+          macro for referencing individual lines of code or a sequence of lines:
+          {" "}
+          <RefLoc n="indentation" lines={2}>line 2</RefLoc>,{" "}
+          <RefLoc n="indentation" lines={[3, 5]}>lines 3–5</RefLoc>, and{" "}
+          <RefLoc n="indentation" lines={{ many: [2, [4, 5], 7] }}>
+            lines 2, 4–5, and 7
+          </RefLoc>.
+        </P>
+      </Hsection>
+    </Hsection>
     <Hsection
       n="highlevel"
       title="High-level Macros — Rustic"
@@ -489,7 +543,7 @@ const exp = (
       </P>
 
       <Pseudocode n="refs" lineNumbering>
-        <DocComment>
+        <CommentLine>
           Lorem ipsum <R n="some_value" />{" "}
           sit amet, consectetur adipiscing elit, sed do eiusmod tempor
           incididunt ut labore et <R n="some_function" />{" "}
@@ -502,7 +556,7 @@ const exp = (
           eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
           proident, sunt in culpa qui officia deserunt mollit anim id est{" "}
           <R n="SomeInterface" />.
-        </DocComment>
+        </CommentLine>
         <Loc>
           <R n="some_value" />, <R n="some_function" />, <R n="SomeType" />,
           {" "}
@@ -521,10 +575,31 @@ const exp = (
             <TupleType types={["A"]} />
           </Loc>
           <Loc>
-            <TupleType types={["A", "B", "C"]} />
+            <TupleType
+              types={["A", {
+                commented: { segment: "B", comment: "bla" },
+              }, {
+                commented: {
+                  segment: "C",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+            />
           </Loc>
           <Loc>
-            <TupleType types={["A", "B", "C"]} multiline />
+            <TupleType
+              types={["A", {
+                commented: { segment: "B", comment: "bla" },
+              }, {
+                commented: {
+                  segment: "C",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+              multiline
+            />
           </Loc>
         </Pseudocode>
 
@@ -535,10 +610,31 @@ const exp = (
             <ChoiceType types={["A"]} />
           </Loc>
           <Loc>
-            <ChoiceType types={["A", "B", "C"]} />
+            <ChoiceType
+              types={["A", {
+                commented: { segment: "B", comment: "bla" },
+              }, {
+                commented: {
+                  segment: "C",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+            />
           </Loc>
           <Loc>
-            <ChoiceType types={["A", "B", "C"]} multiline />
+            <ChoiceType
+              types={["A", {
+                commented: { segment: "B", comment: "bla" },
+              }, {
+                commented: {
+                  segment: "C",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+              multiline
+            />
           </Loc>
         </Pseudocode>
 
@@ -552,16 +648,45 @@ const exp = (
             <FunctionType args={["A"]} ret="Y" />
           </Loc>
           <Loc>
-            <FunctionType args={["A", "B", "C"]} ret="Y" />
+            <FunctionType
+              args={["A", {
+                commented: {
+                  segment: "B",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "C",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+              ret="Y"
+            />
           </Loc>
           <Loc>
-            <FunctionType args={["A", "B", "C"]} ret="Y" multiline />
+            <FunctionType
+              args={["A", {
+                commented: {
+                  segment: "B",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "C",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+              ret="Y"
+              multiline
+            />
           </Loc>
-          <DocComment>
+          <CommentLine>
             When defining named arguments, the first value in the array is the
             name to be displayed, the second is a unique identifier to pass to
             DefRef, and the third value is the type of the argument.
-          </DocComment>
+          </CommentLine>
           <Loc>
             <FunctionTypeNamed
               args={[["a", "functionTypesa1", "A"]]}
@@ -572,8 +697,19 @@ const exp = (
             <FunctionTypeNamed
               args={[
                 ["foo", "functionTypesa2", "A"],
-                ["bar", "functionTypesb2", "B"],
-                ["baz", "functionTypesc2", "C"],
+                {
+                  commented: {
+                    segment: ["bar", "functionTypesb2", "B"],
+                    comment: "bla",
+                  },
+                },
+                {
+                  commented: {
+                    segment: ["baz", "functionTypesc2", "C"],
+                    comment: "bli",
+                    dedicatedLine: true,
+                  },
+                },
               ]}
               ret="Y"
             />
@@ -582,8 +718,19 @@ const exp = (
             <FunctionTypeNamed
               args={[
                 ["foo", "functionTypesa3", "A"],
-                ["bar", "functionTypesb3", "B"],
-                ["baz", "functionTypesc3", "C"],
+                {
+                  commented: {
+                    segment: ["bar", "functionTypesb3", "B"],
+                    comment: "bla",
+                  },
+                },
+                {
+                  commented: {
+                    segment: ["baz", "functionTypesc3", "C"],
+                    comment: "bli",
+                    dedicatedLine: true,
+                  },
+                },
               ]}
               ret="Y"
               multiline
@@ -609,27 +756,27 @@ const exp = (
         </P>
 
         <Pseudocode n="pointerTypes" lineNumbering>
-          <DocComment>
+          <CommentLine>
             A pointer that can be read from but not written to.
-          </DocComment>
+          </CommentLine>
           <Loc>
             <PointerType>A</PointerType>
           </Loc>
-          <DocComment>
+          <CommentLine>
             A pointer that can be read from and written to.
-          </DocComment>
+          </CommentLine>
           <Loc>
             <PointerType mut>A</PointerType>
           </Loc>
-          <DocComment>
+          <CommentLine>
             A pointer that can be written to but not read from.
-          </DocComment>
+          </CommentLine>
           <Loc>
             <PointerType mut="writeonly">A</PointerType>
           </Loc>
-          <DocComment>
+          <CommentLine>
             A pointer that can neither be read from nor written to.
-          </DocComment>
+          </CommentLine>
           <Loc>
             <PointerType mut="opaque">A</PointerType>
           </Loc>
@@ -641,25 +788,27 @@ const exp = (
         </P>
 
         <Pseudocode n="sliceTypes" lineNumbering>
-          <DocComment>
+          <CommentLine>
             A slice that can be read from but not written to.
-          </DocComment>
+          </CommentLine>
           <Loc>
             <SliceType>A</SliceType>
           </Loc>
-          <DocComment>A slice that can be read from and written to.</DocComment>
+          <CommentLine>
+            A slice that can be read from and written to.
+          </CommentLine>
           <Loc>
             <SliceType mut>A</SliceType>
           </Loc>
-          <DocComment>
+          <CommentLine>
             A slice that can be written to but not read from.
-          </DocComment>
+          </CommentLine>
           <Loc>
             <SliceType mut="writeonly">A</SliceType>
           </Loc>
-          <DocComment>
+          <CommentLine>
             A slice that can neither be read from nor written to.
-          </DocComment>
+          </CommentLine>
           <Loc>
             <SliceType mut="opaque">A</SliceType>
           </Loc>
@@ -674,12 +823,37 @@ const exp = (
             <TypeApplicationRaw constr="List" args={["Foo"]} />
           </Loc>
           <Loc>
-            <TypeApplicationRaw constr="List" args={["Foo", "Bar", "Baz"]} />
+            <TypeApplicationRaw
+              constr="List"
+              args={["Foo", {
+                commented: {
+                  segment: "Bar",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "Baz",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+            />
           </Loc>
           <Loc>
             <TypeApplicationRaw
               constr="List"
-              args={["Foo", "Bar", "Baz"]}
+              args={["Foo", {
+                commented: {
+                  segment: "Bar",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "Baz",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
               multiline
             />
           </Loc>
@@ -687,12 +861,37 @@ const exp = (
             <TypeApplication constr="SomeType" args={["Foo"]} />
           </Loc>
           <Loc>
-            <TypeApplication constr="SomeType" args={["Foo", "Bar", "Baz"]} />
+            <TypeApplication
+              constr="SomeType"
+              args={["Foo", {
+                commented: {
+                  segment: "Bar",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "Baz",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+            />
           </Loc>
           <Loc>
             <TypeApplication
               constr="SomeType"
-              args={["Foo", "Bar", "Baz"]}
+              args={["Foo", {
+                commented: {
+                  segment: "Bar",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "Baz",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
               multiline
             />
           </Loc>
@@ -745,10 +944,37 @@ const exp = (
             <Tuple fields={["a"]} />
           </Loc>
           <Loc>
-            <Tuple fields={["a", "b", "c"]} />
+            <Tuple
+              fields={["a", {
+                commented: {
+                  segment: "b",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "c",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+            />
           </Loc>
           <Loc>
-            <Tuple fields={["a", "b", "c"]} multiline />
+            <Tuple
+              fields={["a", {
+                commented: {
+                  segment: "b",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "c",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+              multiline
+            />
           </Loc>
           <Loc>
             <Tuple name="Foo" />
@@ -757,10 +983,39 @@ const exp = (
             <Tuple name="Foo" fields={["a"]} />
           </Loc>
           <Loc>
-            <Tuple name="Foo" fields={["a", "b", "c"]} />
+            <Tuple
+              name="Foo"
+              fields={["a", {
+                commented: {
+                  segment: "b",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "c",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+            />
           </Loc>
           <Loc>
-            <Tuple name="Foo" fields={["a", "b", "c"]} multiline />
+            <Tuple
+              name="Foo"
+              fields={["a", {
+                commented: {
+                  segment: "b",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "c",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+              multiline
+            />
           </Loc>
           <Loc>
             <TupleStruct name="SomeType" />
@@ -769,10 +1024,39 @@ const exp = (
             <TupleStruct name="SomeType" fields={["a"]} />
           </Loc>
           <Loc>
-            <TupleStruct name="SomeType" fields={["a", "b", "c"]} />
+            <TupleStruct
+              name="SomeType"
+              fields={["a", {
+                commented: {
+                  segment: "b",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "c",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+            />
           </Loc>
           <Loc>
-            <TupleStruct name="SomeType" fields={["a", "b", "c"]} multiline />
+            <TupleStruct
+              name="SomeType"
+              fields={["a", {
+                commented: {
+                  segment: "b",
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: "c",
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+              multiline
+            />
           </Loc>
         </Pseudocode>
 
@@ -797,10 +1081,37 @@ const exp = (
             <Record fields={[["a", "1"]]} />
           </Loc>
           <Loc>
-            <Record fields={[["a", "1"], ["b", "2"], ["c", "3"]]} />
+            <Record
+              fields={[["a", "1"], {
+                commented: {
+                  segment: ["b", "2"],
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: ["c", "3"],
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+            />
           </Loc>
           <Loc>
-            <Record fields={[["a", "1"], ["b", "2"], ["c", "3"]]} multiline />
+            <Record
+              fields={[["a", "1"], {
+                commented: {
+                  segment: ["b", "2"],
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: ["c", "3"],
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+              multiline
+            />
           </Loc>
           <Loc>
             <Record name="Foo" />
@@ -809,12 +1120,37 @@ const exp = (
             <Record name="Foo" fields={[["a", "1"]]} />
           </Loc>
           <Loc>
-            <Record name="Foo" fields={[["a", "1"], ["b", "2"], ["c", "3"]]} />
+            <Record
+              name="Foo"
+              fields={[["a", "1"], {
+                commented: {
+                  segment: ["b", "2"],
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: ["c", "3"],
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
+            />
           </Loc>
           <Loc>
             <Record
               name="Foo"
-              fields={[["a", "1"], ["b", "2"], ["c", "3"]]}
+              fields={[["a", "1"], {
+                commented: {
+                  segment: ["b", "2"],
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: ["c", "3"],
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
               multiline
             />
           </Loc>
@@ -828,19 +1164,35 @@ const exp = (
           <Loc>
             <Struct
               name="SomeType"
-              fields={[["some_field", "1"], ["some_field", "2"], [
-                "some_field",
-                "3",
-              ]]}
+              fields={[["some_field", "1"], {
+                commented: {
+                  segment: ["some_field", "2"],
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: ["some_field", "3"],
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
             />
           </Loc>
           <Loc>
             <Struct
               name="SomeType"
-              fields={[["some_field", "1"], ["some_field", "2"], [
-                "some_field",
-                "3",
-              ]]}
+              fields={[["some_field", "1"], {
+                commented: {
+                  segment: ["some_field", "2"],
+                  comment: "bla",
+                },
+              }, {
+                commented: {
+                  segment: ["some_field", "3"],
+                  comment: "bli",
+                  dedicatedLine: true,
+                },
+              }]}
               multiline
             />
           </Loc>
@@ -867,22 +1219,80 @@ const exp = (
           </Loc>
           <Loc>
             <EnumLiteralRaw name="Foo">
-              <Tuple name="Bar" fields={["a", "b"]} />
+              <Tuple
+                name="Bar"
+                fields={["a", {
+                  commented: {
+                    segment: "b",
+                    comment: "bla",
+                  },
+                }, {
+                  commented: {
+                    segment: "c",
+                    comment: "bli",
+                    dedicatedLine: true,
+                  },
+                }]}
+              />
             </EnumLiteralRaw>
           </Loc>
           <Loc>
             <EnumLiteralRaw name="Foo">
-              <Tuple name="Bar" fields={["a", "b"]} multiline />
+              <Tuple
+                name="Bar"
+                fields={["a", {
+                  commented: {
+                    segment: "b",
+                    comment: "bla",
+                  },
+                }, {
+                  commented: {
+                    segment: "c",
+                    comment: "bli",
+                    dedicatedLine: true,
+                  },
+                }]}
+                multiline
+              />
             </EnumLiteralRaw>
           </Loc>
           <Loc>
             <EnumLiteralRaw name="Foo">
-              <Record name="Bar" fields={[["a", "1"], ["b", "2"]]} />
+              <Record
+                name="Bar"
+                fields={[["a", "1"], {
+                  commented: {
+                    segment: ["b", "2"],
+                    comment: "bla",
+                  },
+                }, {
+                  commented: {
+                    segment: ["c", "3"],
+                    comment: "bli",
+                    dedicatedLine: true,
+                  },
+                }]}
+              />
             </EnumLiteralRaw>
           </Loc>
           <Loc>
             <EnumLiteralRaw name="Foo">
-              <Record name="Bar" fields={[["a", "1"], ["b", "2"]]} multiline />
+              <Record
+                name="Bar"
+                fields={[["a", "1"], {
+                  commented: {
+                    segment: ["b", "2"],
+                    comment: "bla",
+                  },
+                }, {
+                  commented: {
+                    segment: ["c", "3"],
+                    comment: "bli",
+                    dedicatedLine: true,
+                  },
+                }]}
+                multiline
+              />
             </EnumLiteralRaw>
           </Loc>
 
@@ -895,7 +1305,18 @@ const exp = (
             <EnumLiteral name="SomeType">
               <TupleStruct
                 name="SomeVariant"
-                fields={["a", "b"]}
+                fields={["a", {
+                  commented: {
+                    segment: "b",
+                    comment: "bla",
+                  },
+                }, {
+                  commented: {
+                    segment: "c",
+                    comment: "bli",
+                    dedicatedLine: true,
+                  },
+                }]}
               />
             </EnumLiteral>
           </Loc>
@@ -903,7 +1324,18 @@ const exp = (
             <EnumLiteral name="SomeType">
               <TupleStruct
                 name="SomeVariant"
-                fields={["a", "b"]}
+                fields={["a", {
+                  commented: {
+                    segment: ["b", "2"],
+                    comment: "bla",
+                  },
+                }, {
+                  commented: {
+                    segment: ["c", "3"],
+                    comment: "bli",
+                    dedicatedLine: true,
+                  },
+                }]}
                 multiline
               />
             </EnumLiteral>
@@ -912,7 +1344,18 @@ const exp = (
             <EnumLiteral name="SomeType">
               <Struct
                 name="SomeVariant"
-                fields={[["some_field", "1"], ["some_field", "2"]]}
+                fields={[["some_field", "1"], {
+                  commented: {
+                    segment: ["some_field", "2"],
+                    comment: "bla",
+                  },
+                }, {
+                  commented: {
+                    segment: ["some_field", "3"],
+                    comment: "bli",
+                    dedicatedLine: true,
+                  },
+                }]}
               />
             </EnumLiteral>
           </Loc>
@@ -920,7 +1363,18 @@ const exp = (
             <EnumLiteral name="SomeType">
               <Struct
                 name="SomeVariant"
-                fields={[["some_field", "1"], ["some_field", "2"]]}
+                fields={[["some_field", "1"], {
+                  commented: {
+                    segment: ["some_field", "2"],
+                    comment: "bla",
+                  },
+                }, {
+                  commented: {
+                    segment: ["some_field", "3"],
+                    comment: "bli",
+                    dedicatedLine: true,
+                  },
+                }]}
                 multiline
               />
             </EnumLiteral>
@@ -939,10 +1393,13 @@ const exp = (
 // like creating a directory that contains a website!
 ctx.evaluate(exp);
 
-// anonymous fu                                                                                                                                                                                                                                  nction (closure)
+// enum is expression
+// anonymous function (closure)
 // function application
 // array literal, repeated array literal
 // referencing and dereferencing
-// taking slices
+// taking slices, dereferencing slices
 
 // primitive literals
+
+// Add line comments to Loc macro

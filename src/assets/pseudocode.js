@@ -54,12 +54,12 @@ document.querySelector("body").addEventListener("mouseover", (evt) => {
 function applyStyles(encoded, n) {
   if (encoded !== null) {
     /**
-     * The encoding is simple: if there are many lines, separate them with `a` characters.
-     * Encode an individual line as a decimal int, and a sequence as two decimal ints, separated by the `b` character.
+     * The encoding is simple: if there are many lines, separate them with `.` characters.
+     * Encode an individual line as a decimal int, and a sequence as two decimal ints, separated by the `-` character.
      */
-    const parts = encoded.split("a");
+    const parts = encoded.split(".");
     for (const part of parts) {
-      const rangeParts = part.split("b");
+      const rangeParts = part.split("-");
 
       if (rangeParts.length === 1) {
         doApply(parseInt(rangeParts[0]), n);
