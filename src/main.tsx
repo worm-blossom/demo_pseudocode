@@ -9,7 +9,11 @@ import {
   ArrayLiteral,
   ArrayRepeated,
   ArrayType,
+  Assign,
+  AssignRaw,
   B,
+  BlankPattern,
+  Break,
   ChoiceType,
   Code,
   CommentLine,
@@ -28,12 +32,16 @@ import {
   Delimited,
   Delimiters,
   Deref,
+  Else,
+  ElseIf,
   Em,
   EnumLiteral,
   EnumLiteralRaw,
   EscapeHtml,
   Expression,
   Expressions,
+  For,
+  ForRaw,
   FunctionLiteral,
   FunctionLiteralUntyped,
   FunctionType,
@@ -42,21 +50,27 @@ import {
   Gte,
   H,
   Hsection,
+  If,
   Indent,
   Index,
   InlineComment,
   IsVariant,
   Keyword,
   Land,
+  Let,
+  LetRaw,
   Li,
   Loc,
+  Loop,
   Lt,
   Lte,
   M,
   makeFigureMacro,
   makeNumberingRenderer,
   Marginale,
+  Match,
   MM,
+  Mut,
   Ol,
   P,
   Parens,
@@ -65,12 +79,15 @@ import {
   PreviewScope,
   Pseudocode,
   R,
+  RangeLiteral,
   Rb,
   Rc,
   Rcb,
   Record,
   Reference,
   RefLoc,
+  RenderFreshValue,
+  Return,
   Rs,
   Rsb,
   Sidenote,
@@ -89,6 +106,7 @@ import {
   TypeApplicationRaw,
   Ul,
   WaitForMarginales,
+  While,
 } from "../deps.ts";
 import { ArticleTemplate } from "./articleTemplate.tsx";
 
@@ -236,6 +254,10 @@ const exp = (
         <CommentLine>
           And a full-line comment using the dedicated macro.
         </CommentLine>
+        <Loc>
+          finally(a, long, line) of code_that_will_wrap() && should(take, up,
+          the) + full.line_width + when(there_is, no, comment);
+        </Loc>
       </Pseudocode>
 
       <P>
@@ -1879,6 +1901,37 @@ const exp = (
         </Pseudocode>
 
         <P>
+          Range literals:
+        </P>
+
+        <Pseudocode n="rangeExpression" lineNumbering>
+          <Loc>
+            <RangeLiteral />
+          </Loc>
+          <Loc>
+            <RangeLiteral from="4" />
+          </Loc>
+          <Loc>
+            <RangeLiteral to="7" />
+          </Loc>
+          <Loc>
+            <RangeLiteral from="4" to="7" />
+          </Loc>
+          <Loc>
+            <RangeLiteral inclusive />
+          </Loc>
+          <Loc>
+            <RangeLiteral from="4" inclusive />
+          </Loc>
+          <Loc>
+            <RangeLiteral to="7" inclusive />
+          </Loc>
+          <Loc>
+            <RangeLiteral from="4" to="7" inclusive />
+          </Loc>
+        </Pseudocode>
+
+        <P>
           Taking slices, i.e., creating pointers to zero or more values:
         </P>
 
@@ -1904,6 +1957,18 @@ const exp = (
           <Loc>
             <Slice mut="opaque">A</Slice>
           </Loc>
+          <Loc comment="Don't do this.">
+            <Slice inclusive>A</Slice>
+          </Loc>
+          <Loc comment="Don't do this.">
+            <Slice from="4" inclusive>A</Slice>
+          </Loc>
+          <Loc>
+            <Slice to="7" inclusive>A</Slice>
+          </Loc>
+          <Loc>
+            <Slice from="4" to="7" inclusive>A</Slice>
+          </Loc>
         </Pseudocode>
 
         <P>
@@ -1917,7 +1982,271 @@ const exp = (
         </Pseudocode>
       </Hsection>
 
-      <Hsection n="rusticStatements" title="Statements"></Hsection>
+      <Hsection n="rusticStatements" title="Statements">
+        <P>
+          Creating variables via <Code>let</Code> statements.
+        </P>
+
+        <Pseudocode n="letStatement" lineNumbering>
+          <Loc>
+            <LetRaw lhs="x">4</LetRaw>
+          </Loc>
+          <Loc>
+            <LetRaw lhs="x" mut>4</LetRaw>
+          </Loc>
+          <Loc>
+            <LetRaw lhs="x" type="Foo">4</LetRaw>
+          </Loc>
+          <Loc>
+            <Let lhs="foo1">4</Let>
+          </Loc>
+          <Loc>
+            <Let lhs={["foo", "letStatementFoo0"]}>4</Let>
+          </Loc>
+          <Loc>
+            <Let lhs={["foo", "letStatementFoo1"]} type="Foo">4</Let>
+          </Loc>
+          <Loc>
+            <Let mut lhs={["foo", "letStatementFoo2"]}>4</Let>
+          </Loc>
+          <Loc>
+            <LetRaw
+              lhs={
+                <Tuple
+                  fields={[
+                    <RenderFreshValue id={["x", "letStatementX0"]} />,
+                    <>
+                      <Mut /> <RenderFreshValue id={["y", "letStatementY0"]} />
+                    </>,
+                  ]}
+                />
+              }
+            >
+              bla
+            </LetRaw>
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          Assign to variables:
+        </P>
+
+        <Pseudocode n="assign" lineNumbering>
+          <Loc>
+            <AssignRaw lhs="x">4</AssignRaw>
+          </Loc>
+          <Loc>
+            <Assign lhs="foo1">4</Assign>
+          </Loc>
+          <Loc>
+            <AssignRaw
+              lhs={
+                <Tuple
+                  fields={[
+                    <R n="letStatementX0" />,
+                    <R n="letStatementY0" />,
+                  ]}
+                />
+              }
+            >
+              bla
+            </AssignRaw>
+          </Loc>
+          <Loc>
+            <AssignRaw lhs="x" op="+=">4</AssignRaw>
+          </Loc>
+          <Loc>
+            <Assign lhs="foo1" op="+=">4</Assign>
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          If statements, else statements, else if statements:
+        </P>
+
+        <Pseudocode n="ifElse" lineNumbering>
+          <Loc>
+            <If cond="x" body={["foo()", "bar()"]} />
+          </Loc>
+          <Loc>
+            <If cond="x" body={["foo()"]} singleline />
+          </Loc>
+          <Loc>
+            <If cond="x" body={["foo()", "bar()"]} />{" "}
+            <Else body={["baz()", "qux()"]} />
+          </Loc>
+          <Loc>
+            <If cond="x" body={["foo()"]} singleline />{" "}
+            <Else body={["bar()"]} singleline />
+          </Loc>
+          <Loc>
+            <If cond="x" body={["foo()", "bar()"]} />{" "}
+            <ElseIf body={["baz()", "qux()"]} />
+          </Loc>
+          <Loc>
+            <If cond="x" body={["foo()"]} singleline />{" "}
+            <ElseIf body={["bar()"]} singleline />
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          Match statements:
+        </P>
+
+        <Pseudocode n="matchStatements" lineNumbering>
+          <Loc>
+            <Match
+              exp={"x"}
+              cases={[
+                ["0", "foo()"],
+                ["1", ["foo()", "bar()"]],
+                {
+                  commented: {
+                    segment: ["2", "foo()"],
+                    comment: "bla",
+                  },
+                },
+                {
+                  commented: {
+                    segment: ["3", "foo()"],
+                    comment: "bli",
+                    dedicatedLine: true,
+                  },
+                },
+                {
+                  commented: {
+                    segment: ["4", ["foo()", "bar()"]],
+                    comment: "blu",
+                  },
+                },
+                {
+                  commented: {
+                    segment: [<BlankPattern />, ["foo()", "bar()"]],
+                    comment: "ble",
+                    dedicatedLine: true,
+                  },
+                },
+              ]}
+            />
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          Return statements, and break statements:
+        </P>
+
+        <Pseudocode n="returnBreak" lineNumbering>
+          <Loc>
+            <Return />
+          </Loc>
+          <Loc>
+            <Return>x</Return>
+          </Loc>
+          <Loc>
+            <Break />
+          </Loc>
+          <Loc>
+            <Break>x</Break>
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          While loops:
+        </P>
+
+        <Pseudocode n="whileStatement" lineNumbering>
+          <Loc>
+            <While cond="x" body={["foo()", "bar()"]} />
+          </Loc>
+          <Loc>
+            <While cond="x" body={["foo()"]} singleline />
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          Infinite loop statements:
+        </P>
+
+        <Pseudocode n="loopStatement" lineNumbering>
+          <Loc>
+            <Loop body={["foo()", "bar()"]} />
+          </Loc>
+          <Loc>
+            <Loop body={["foo()"]} singleline />
+          </Loc>
+        </Pseudocode>
+
+        <P>
+          For loops, i.e., consuming iterators:
+        </P>
+
+        <Pseudocode n="forStatement" lineNumbering>
+          <Loc>
+            <ForRaw
+              pattern="x"
+              iterator={<RangeLiteral from="4" to="7" />}
+              body={["foo()", "bar()"]}
+            />
+          </Loc>
+          <Loc>
+            <ForRaw
+              pattern="x"
+              iterator={<RangeLiteral from="4" to="7" />}
+              body={["foo()", "bar()"]}
+              mut
+            />
+          </Loc>
+          <Loc>
+            <ForRaw
+              pattern="x"
+              iterator={<RangeLiteral from="4" to="7" />}
+              body={["foo()"]}
+              singleline
+            />
+          </Loc>
+          <Loc>
+            <ForRaw
+              pattern="x"
+              iterator={<RangeLiteral from="4" to="7" />}
+              body={["foo()"]}
+              singleline
+              mut
+            />
+          </Loc>
+          <Loc>
+            <For
+              pattern={["x", "forX1"]}
+              iterator={<RangeLiteral from="4" to="7" />}
+              body={["foo()", "bar()"]}
+            />
+          </Loc>
+          <Loc>
+            <For
+              pattern={["x", "forX2"]}
+              iterator={<RangeLiteral from="4" to="7" />}
+              body={["foo()", "bar()"]}
+              mut
+            />
+          </Loc>
+          <Loc>
+            <For
+              pattern={["x", "forX3"]}
+              iterator={<RangeLiteral from="4" to="7" />}
+              body={["foo()"]}
+              singleline
+            />
+          </Loc>
+          <Loc>
+            <For
+              pattern={["x", "forX4"]}
+              iterator={<RangeLiteral from="4" to="7" />}
+              body={["foo()"]}
+              singleline
+              mut
+            />
+          </Loc>
+        </Pseudocode>
+      </Hsection>
 
       <Hsection n="rusticItems" title="Items"></Hsection>
     </Hsection>
@@ -1927,6 +2256,3 @@ const exp = (
 // Evaluate the expression. This has exciting side-effects,
 // like creating a directory that contains a website!
 ctx.evaluate(exp);
-
-// referencing and dereferencing
-// taking slices, dereferencing slices

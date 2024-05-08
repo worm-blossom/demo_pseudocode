@@ -9,6 +9,7 @@ macromania_pseudocode
     --rb1: #819331;
     --rb2: #7b3814;
     --kw: #268bd2; /* solarized-blue */
+    --kw2: #dc322f; /* solarized red */
 }
 
 code.pseudocode {
@@ -82,8 +83,6 @@ code.pseudocode {
             margin-left: 1ch;
         }
 
-        /* padding-left: calc(1ch - 2px); */
-
         .inlineComment {
             border-left: dotted var(--pseudo-fg-muted) 2px;
             border-right: dotted var(--pseudo-fg-muted) 2px;
@@ -92,6 +91,10 @@ code.pseudocode {
 
             color: var(--pseudo-fg-slightly-muted);
         }
+    }
+
+    >.locContent:not(:has(div::nth-child(2))) {
+        grid-template-columns: auto;
     }
 
     background-color: rgba(0, 0, 0, 0.01);
@@ -154,6 +157,10 @@ code.pseudocode.noLineNumbers>.locGutter>.lineNumber {
 
 .pseudocode .kw {
     color: var(--kw);
+}
+
+.pseudocode .kw2 {
+    color: var(--kw2);
 }
 
 /*
