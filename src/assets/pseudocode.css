@@ -211,3 +211,7 @@ macromania_rustic
 .rustic.interface {
     color: var(--sol-cyan);
 }
+
+.rustic.typeArg {
+    color: var(--sol-red);
+}

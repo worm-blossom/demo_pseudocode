@@ -27,6 +27,7 @@ import {
   DefFunction,
   DefInterface,
   DefType,
+  DefTypeArg,
   DefValue,
   DefVariant,
   Delimited,
@@ -101,6 +102,7 @@ import {
   Tuple,
   TupleStruct,
   TupleType,
+  Type,
   TypeAnnotation,
   TypeApplication,
   TypeApplicationRaw,
@@ -549,6 +551,11 @@ const exp = (
       </P>
 
       <P>
+        All examples we show here are rendered using C-style braces, but
+        everything also works for Python-style and Ruby-style syntax.
+      </P>
+
+      <P>
         The API is rather extensive, so we split it into four groups:{" "}
         <R n="inlineTypes">type operators</R>,{" "}
         <R n="inlineExpressions">expressions</R>,{" "}
@@ -559,12 +566,13 @@ const exp = (
       <PreviewScope>
         <P>
           Rustic is integrated with DefRef, and creates definitions of several
-          kinds: values, functions, types, fields, enum variants, and
-          interfaces. For each of these, there is a macro to manually create
-          these kinds of definitions: <DefValue n="some_value" />,{" "}
+          kinds: values, functions, types, fields, enum variants, interfaces,
+          and type arguments. For each of these, there is a macro to manually
+          create these kinds of definitions: <DefValue n="some_value" />,{" "}
           <DefFunction n="some_function" />, <DefType n="SomeType" />,{" "}
-          <DefField n="some_field" />, <DefVariant n="SomeVariant" />, and{" "}
-          <DefInterface n="SomeInterface" />.
+          <DefField n="some_field" />, <DefVariant n="SomeVariant" />,{" "}
+          <DefInterface n="SomeInterface" />, and{" "}
+          <DefTypeArg n="SomeTypeArg" />.
         </P>
       </PreviewScope>
 
@@ -572,7 +580,7 @@ const exp = (
         You can reference these definitions anywhere: in body text, in
         pseudocode, and in code comments. <R n="some_value" />,{" "}
         <R n="some_function" />, <R n="SomeType" />, <R n="some_field" />,{" "}
-        <R n="SomeVariant" />, <R n="SomeInterface" />.
+        <R n="SomeVariant" />, <R n="SomeInterface" />, <R n="SomeTypeArg" />.
       </P>
 
       <Pseudocode n="refs" lineNumbering>
@@ -587,13 +595,15 @@ const exp = (
           {" "}
           <R n="SomeVariant" />{" "}
           eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-          proident, sunt in culpa qui officia deserunt mollit anim id est{" "}
-          <R n="SomeInterface" />.
+          proident, sunt in <R n="SomeInterface" />{" "}
+          qui officia deserunt mollit anim id est <R n="SomeTypeArg" />.
         </CommentLine>
         <Loc>
           <R n="some_value" />, <R n="some_function" />, <R n="SomeType" />,
           {" "}
-          <R n="some_field" />, <R n="SomeVariant" />, <R n="SomeInterface" />
+          <R n="some_field" />, <R n="SomeVariant" />, <R n="SomeInterface" />,
+          {" "}
+          <R n="SomeTypeArg" />
         </Loc>
       </Pseudocode>
 
@@ -715,6 +725,45 @@ const exp = (
               multiline
             />
           </Loc>
+          <Loc>
+            <FunctionType
+              generics={[{
+                id: ["S", "funType10"],
+              }, {
+                id: ["T", "funType11"],
+                bounds: ["Eq"],
+              }, {
+                id: ["U", "funType12"],
+                bounds: ["Eq", "Ord"],
+              }, {
+                id: ["V", "funType13"],
+                bounds: ["Eq", "Ord"],
+                multiline: true,
+              }]}
+              args={[<R n="funType10" />]}
+              ret={<R n="funType13" />}
+            />
+          </Loc>
+          <Loc>
+            <FunctionType
+              generics={[{
+                id: ["S", "funType20"],
+              }, {
+                id: ["T", "funType21"],
+                bounds: ["Eq"],
+              }, {
+                id: ["U", "funType22"],
+                bounds: ["Eq", "Ord"],
+              }, {
+                id: ["V", "funType23"],
+                bounds: ["Eq", "Ord"],
+                multiline: true,
+              }]}
+              multilineGenerics
+              args={[<R n="funType20" />]}
+              ret={<R n="funType23" />}
+            />
+          </Loc>
           <CommentLine>
             When defining named arguments, the first value in the array is the
             name to be displayed, the second is a unique identifier to pass to
@@ -767,6 +816,45 @@ const exp = (
               ]}
               ret="Y"
               multiline
+            />
+          </Loc>
+          <Loc>
+            <FunctionTypeNamed
+              generics={[{
+                id: ["S", "funType50"],
+              }, {
+                id: ["T", "funType51"],
+                bounds: ["Eq"],
+              }, {
+                id: ["U", "funType52"],
+                bounds: ["Eq", "Ord"],
+              }, {
+                id: ["V", "funType53"],
+                bounds: ["Eq", "Ord"],
+                multiline: true,
+              }]}
+              args={[["s", "functionTypesa4", <R n="funType50" />]]}
+              ret={<R n="funType53" />}
+            />
+          </Loc>
+          <Loc>
+            <FunctionTypeNamed
+              generics={[{
+                id: ["S", "funType60"],
+              }, {
+                id: ["T", "funType61"],
+                bounds: ["Eq"],
+              }, {
+                id: ["U", "funType62"],
+                bounds: ["Eq", "Ord"],
+              }, {
+                id: ["V", "funType63"],
+                bounds: ["Eq", "Ord"],
+                multiline: true,
+              }]}
+              multilineGenerics
+              args={[["s", "functionTypesa5", <R n="funType60" />]]}
+              ret={<R n="funType63" />}
             />
           </Loc>
         </Pseudocode>
@@ -1615,6 +1703,49 @@ const exp = (
               ret="Number"
             />
           </Loc>
+          <Loc>
+            <FunctionLiteral
+              generics={[{
+                id: ["S", "funLit10"],
+              }, {
+                id: ["T", "funLit11"],
+                bounds: ["Eq"],
+              }, {
+                id: ["U", "funLit12"],
+                bounds: ["Eq", "Ord"],
+              }, {
+                id: ["V", "funLit13"],
+                bounds: ["Eq", "Ord"],
+                multiline: true,
+              }]}
+              args={[["s", "functionLiterala51", <R n="funLit10"/>]]}
+              body={["return 4"]}
+              singleLineBody
+              ret={<R n={"funLit13"} />}
+            />
+          </Loc>
+          <Loc>
+            <FunctionLiteral
+              generics={[{
+                id: ["S", "funLit20"],
+              }, {
+                id: ["T", "funLit21"],
+                bounds: ["Eq"],
+              }, {
+                id: ["U", "funLit22"],
+                bounds: ["Eq", "Ord"],
+              }, {
+                id: ["V", "funLit23"],
+                bounds: ["Eq", "Ord"],
+                multiline: true,
+              }]}
+              multilineGenerics
+              args={[["s", "functionLiterala61", <R n="funLit20"/>]]}
+              body={["return 4"]}
+              singleLineBody
+              ret={<R n={"funLit23"} />}
+            />
+          </Loc>
         </Pseudocode>
 
         <P>
@@ -2249,6 +2380,56 @@ const exp = (
       </Hsection>
 
       <Hsection n="rusticItems" title="Items"></Hsection>
+      <P>
+        Type aliases:
+      </P>
+
+      <Pseudocode n="typeItem" lineNumbering>
+        <Loc>
+          <Type lhs={["Foo", "typeItem0"]}>Bar</Type>
+        </Loc>
+        <Loc>
+          <Type
+            lhs={["Foo", "typeItem1"]}
+            generics={[{
+              id: ["S", "typeItemArg10"],
+            }, {
+              id: ["T", "typeItemArg11"],
+              bounds: ["Eq"],
+            }, {
+              id: ["U", "typeItemArg12"],
+              bounds: ["Eq", "Ord"],
+            }, {
+              id: ["V", "typeItemArg13"],
+              bounds: ["Eq", "Ord"],
+              multiline: true,
+            }]}
+          >
+            Bar
+          </Type>
+        </Loc>
+        <Loc>
+          <Type
+            lhs={["Foo", "typeItem2"]}
+            generics={[{
+              id: ["S", "typeItemArg20"],
+            }, {
+              id: ["T", "typeItemArg21"],
+              bounds: ["Eq"],
+            }, {
+              id: ["U", "typeItemArg22"],
+              bounds: ["Eq", "Ord"],
+            }, {
+              id: ["V", "typeItemArg23"],
+              bounds: ["Eq", "Ord"],
+              multiline: true,
+            }]}
+            multiline
+          >
+            Bar
+          </Type>
+        </Loc>
+      </Pseudocode>
     </Hsection>
   </ArticleTemplate>
 );
@@ -2256,3 +2437,5 @@ const exp = (
 // Evaluate the expression. This has exciting side-effects,
 // like creating a directory that contains a website!
 ctx.evaluate(exp);
+
+// generic parameters for function types (and literals?)
