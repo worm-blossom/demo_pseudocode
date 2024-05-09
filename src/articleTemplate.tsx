@@ -6,6 +6,7 @@ import {
   Div,
   JsDependency,
   makeNumberingRenderer,
+  PreviewScopePushWrapper,
   ScriptDependencyInfo,
   TableOfContents,
 } from "../deps.ts";
@@ -92,9 +93,6 @@ export function ArticleTemplate(
           depsJsPreview={[]}
           depsCssRef={[]}
           depsJsRef={[prettyPreviewsInfo, refHighlighting]}
-          wrapPreviews={(_ctx, preview) => {
-            return <Div id="wrapContent">{preview}</Div>;
-          }}
         />,
         <ConfigMarginalia sidenoteCounter={sidenoteCounter} />,
       ]}
@@ -124,28 +122,34 @@ export function ArticleTemplate(
             {/* See https://github.com/worm-blossom/macromania-assets */}
             <Assets input={["src", "assets"]} assets={{}} />
           </Dir>
-          <File name="index.html">
-            <Html5
-              title="Macromania Demo"
-              headContents={`<meta name="viewport" content="width=device-width, initial-scale=1">`}
-            >
-              <CssDependency dep={["index.css"]} />
-              <JsDependency dep={["toc.js"]} scriptProps={{ defer: true }} />
+          <PreviewScopePushWrapper
+            wrapper={(_ctx, preview) => {
+              return <Div id="wrapContent">{preview}</Div>;
+            }}
+          >
+            <File name="index.html">
+              <Html5
+                title="Macromania Demo"
+                headContents={`<meta name="viewport" content="width=device-width, initial-scale=1">`}
+              >
+                <CssDependency dep={["index.css"]} />
+                <JsDependency dep={["toc.js"]} scriptProps={{ defer: true }} />
 
-              <Div id="wrapContent">
-                <Hsection title={title} n={titleId}>
-                  <TableOfContents stopLevel={99} />
-                  <Div>
-                    <RenderAuthors authors={authors ?? []} />
-                  </Div>
-                  <Div>
-                    <RenderAbstract children={abstract} />
-                  </Div>
-                  <exps x={children} />
-                </Hsection>
-              </Div>
-            </Html5>
-          </File>
+                <Div id="wrapContent">
+                  <Hsection title={title} n={titleId}>
+                    <TableOfContents stopLevel={99} />
+                    <Div>
+                      <RenderAuthors authors={authors ?? []} />
+                    </Div>
+                    <Div>
+                      <RenderAbstract children={abstract} />
+                    </Div>
+                    <exps x={children} />
+                  </Hsection>
+                </Div>
+              </Html5>
+            </File>
+          </PreviewScopePushWrapper>
         </ServerRoot>
       </Dir>
     </Config>

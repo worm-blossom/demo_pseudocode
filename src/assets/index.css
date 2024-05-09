@@ -293,6 +293,10 @@ figure.theoremlike {
 .toc {
   font-size: 0.85rem;
   text-align: left;
+
+  ol {
+    margin: 0;
+  }
 }
 
 .toc li {
@@ -303,10 +307,10 @@ figure.theoremlike {
 
 .toc li>a {
   text-decoration: none;
-  transition: border-color 0.5s ease-in-out;
-  border-bottom: 1px solid var(--main-bg);
+  color: var(--main-subtle);
+  transition: color 0.5s ease-in-out;
 }
 
-li.tocVisible>a {
-  border-bottom: 1px solid var(--main-fg);
+li.tocVisible>a, .toc li>a:hover {
+  color: var(--main-fg);
 }

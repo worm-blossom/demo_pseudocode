@@ -8,8 +8,10 @@ macromania_pseudocode
     --rb0: #0431fa;
     --rb1: #819331;
     --rb2: #7b3814;
-    --kw: #268bd2; /* solarized-blue */
-    --kw2: #dc322f; /* solarized red */
+    --kw: #268bd2;
+    /* solarized-blue */
+    --kw2: #dc322f;
+    /* solarized red */
 }
 
 code.pseudocode {
@@ -65,7 +67,8 @@ code.pseudocode {
             }
         }
 
-        >div.comment, >div.lineComment {
+        >div.comment,
+        >div.lineComment {
             border-left: dotted var(--pseudo-fg-muted) 2px;
             color: var(--pseudo-fg-slightly-muted);
             padding-left: calc(1ch - 2px);
@@ -131,6 +134,22 @@ code.pseudocode {
     }
 }
 
+code.pseudocode:is(.dedent1, .dedent2)>.locContent {
+    >div:first-child {
+        >.indent:first-child {
+            display: none;
+        }
+    }
+}
+
+code.pseudocode.dedent2>.locContent {
+    >div:first-child {
+        >.indent:nth-child(2) {
+            display: none;
+        }
+    }
+}
+
 code.pseudocode.noLineNumbers>.locGutter>.lineNumber {
     display: none;
 }
@@ -139,7 +158,7 @@ code.pseudocode.noLineNumbers>.locGutter>.lineNumber {
     opacity: 100%;
 }
 
-.pseudocode .deemph {
+code .deemph {
     color: var(--pseudo-fg-muted);
 }
 

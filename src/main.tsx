@@ -36,6 +36,7 @@ import {
   Else,
   ElseIf,
   Em,
+  Enum,
   EnumLiteral,
   EnumLiteralRaw,
   EscapeHtml,
@@ -43,6 +44,8 @@ import {
   Expressions,
   For,
   ForRaw,
+  FunctionItem,
+  FunctionItemUntyped,
   FunctionLiteral,
   FunctionLiteralUntyped,
   FunctionType,
@@ -59,6 +62,7 @@ import {
   Keyword,
   Land,
   Let,
+  LetItem,
   LetRaw,
   Li,
   Loc,
@@ -99,8 +103,10 @@ import {
   SpliceLoc,
   Strong,
   Struct,
+  StructDef,
   Tuple,
   TupleStruct,
+  TupleStructDef,
   TupleType,
   Type,
   TypeAnnotation,
@@ -1718,7 +1724,7 @@ const exp = (
                 bounds: ["Eq", "Ord"],
                 multiline: true,
               }]}
-              args={[["s", "functionLiterala51", <R n="funLit10"/>]]}
+              args={[["s", "functionLiterala51", <R n="funLit10" />]]}
               body={["return 4"]}
               singleLineBody
               ret={<R n={"funLit13"} />}
@@ -1740,7 +1746,7 @@ const exp = (
                 multiline: true,
               }]}
               multilineGenerics
-              args={[["s", "functionLiterala61", <R n="funLit20"/>]]}
+              args={[["s", "functionLiterala61", <R n="funLit20" />]]}
               body={["return 4"]}
               singleLineBody
               ret={<R n={"funLit23"} />}
@@ -2129,16 +2135,16 @@ const exp = (
             <LetRaw lhs="x" type="Foo">4</LetRaw>
           </Loc>
           <Loc>
-            <Let lhs="foo1">4</Let>
+            <Let id="foo1">4</Let>
           </Loc>
           <Loc>
-            <Let lhs={["foo", "letStatementFoo0"]}>4</Let>
+            <Let id={["foo", "letStatementFoo0"]}>4</Let>
           </Loc>
           <Loc>
-            <Let lhs={["foo", "letStatementFoo1"]} type="Foo">4</Let>
+            <Let id={["foo", "letStatementFoo1"]} type="Foo">4</Let>
           </Loc>
           <Loc>
-            <Let mut lhs={["foo", "letStatementFoo2"]}>4</Let>
+            <Let mut id={["foo", "letStatementFoo2"]}>4</Let>
           </Loc>
           <Loc>
             <LetRaw
@@ -2167,7 +2173,7 @@ const exp = (
             <AssignRaw lhs="x">4</AssignRaw>
           </Loc>
           <Loc>
-            <Assign lhs="foo1">4</Assign>
+            <Assign id="foo1">4</Assign>
           </Loc>
           <Loc>
             <AssignRaw
@@ -2187,7 +2193,7 @@ const exp = (
             <AssignRaw lhs="x" op="+=">4</AssignRaw>
           </Loc>
           <Loc>
-            <Assign lhs="foo1" op="+=">4</Assign>
+            <Assign id="foo1" op="+=">4</Assign>
           </Loc>
         </Pseudocode>
 
@@ -2379,18 +2385,18 @@ const exp = (
         </Pseudocode>
       </Hsection>
 
-      <Hsection n="rusticItems" title="Items"></Hsection>
-      <P>
-        Type aliases:
-      </P>
+      <Hsection n="rusticItems" title="Items">
+        <P>
+          Type aliases:
+        </P>
 
-      <Pseudocode n="typeItem" lineNumbering>
-        <Loc>
-          <Type lhs={["Foo", "typeItem0"]}>Bar</Type>
-        </Loc>
-        <Loc>
+        <Pseudocode n="typeItem" lineNumbering>
+          <Type id={["Foo", "typeItem0"]}>Bar</Type>
+          <Type id={["Foo", "typeItem9"]} comment="Doc comment for the type.">
+            Bar
+          </Type>
           <Type
-            lhs={["Foo", "typeItem1"]}
+            id={["Foo", "typeItem1"]}
             generics={[{
               id: ["S", "typeItemArg10"],
             }, {
@@ -2407,10 +2413,8 @@ const exp = (
           >
             Bar
           </Type>
-        </Loc>
-        <Loc>
           <Type
-            lhs={["Foo", "typeItem2"]}
+            id={["Foo", "typeItem2"]}
             generics={[{
               id: ["S", "typeItemArg20"],
             }, {
@@ -2428,8 +2432,230 @@ const exp = (
           >
             Bar
           </Type>
-        </Loc>
-      </Pseudocode>
+        </Pseudocode>
+
+        <P>
+          Creating global variables, aka static variables.
+        </P>
+
+        <Pseudocode n="letItem" lineNumbering>
+          <LetItem id={["foo", "letItemFoo0"]}>4</LetItem>
+          <LetItem
+            comment="Doc comment for the let item."
+            id={["foo", "letItemFoo1"]}
+          >
+            4
+          </LetItem>
+          <LetItem id={["foo", "letItemFoo2"]} type="Foo">4</LetItem>
+          <LetItem mut id={["foo", "letItemFoo3"]}>4</LetItem>
+        </Pseudocode>
+
+        <P>
+          Creating named functions.
+        </P>
+
+        <Pseudocode n="functionItem" lineNumbering>
+          <FunctionItemUntyped
+            id={["foo", "functionItem1"]}
+            args={[["a", "functionItem10"]]}
+            body={[<Return>4</Return>]}
+          />
+          <FunctionItemUntyped
+            comment="Untyped function doc comment."
+            id={["foo", "functionItem2"]}
+            args={[["a", "functionItem20"]]}
+            body={[<Return>4</Return>]}
+          />
+          <FunctionItem
+            id={["foo", "functionItem3"]}
+            args={[["a", "functionItem30", "A"]]}
+            body={[<Return>4</Return>]}
+          />
+          <FunctionItem
+            comment="Typed function doc comment."
+            id={["foo", "functionItem4"]}
+            args={[["a", "functionItem40", "A"]]}
+            body={[<Return>4</Return>]}
+          />
+        </Pseudocode>
+
+        <P>
+          Struct definitions:
+        </P>
+
+        <Pseudocode n="structItem" lineNumbering>
+          <StructDef
+            id={["Foo", "structItem0"]}
+            fields={[[["x", "structItem00"], "X"]]}
+          />
+          <StructDef
+            id={["Foo", "structItem1"]}
+            fields={[{
+              commented: {
+                segment: [["x", "structItem10"], "X"],
+                comment: "Field doc comment.",
+                dedicatedLine: true,
+              },
+            }, {
+              commented: {
+                segment: [["y", "structItem17"], "Y"],
+                comment: "Field doc comment inline.",
+              },
+            }]}
+          />
+          <StructDef
+            id={["Foo", "structItem3"]}
+            fields={[[["x", "structItem30"], "X"]]}
+            comment="Struct doc comment."
+          />
+          <StructDef
+            id={["Foo", "structItem4"]}
+            generics={[{
+              id: ["S", "structItemArg10"],
+            }, {
+              id: ["T", "structItemArg11"],
+              bounds: ["Eq"],
+            }, {
+              id: ["U", "structItemArg12"],
+              bounds: ["Eq", "Ord"],
+            }, {
+              id: ["V", "structItemArg13"],
+              bounds: ["Eq", "Ord"],
+              multiline: true,
+            }]}
+            multilineGenerics
+            fields={[[["x", "structItem40"], <R n="structItemArg10" />]]}
+            comment="Struct doc comment."
+          />
+        </Pseudocode>
+
+        <P>
+          Tuple struct definitions:
+        </P>
+
+        <Pseudocode n="tupleStructItem" lineNumbering>
+          <TupleStructDef
+            id={["Foo", "tupleStructItem8"]}
+          />
+          <TupleStructDef
+            id={["Foo", "tupleStructItem0"]}
+            fields={["X"]}
+          />
+          <TupleStructDef
+            id={["Foo", "tupleStructItem1"]}
+            fields={[{
+              commented: {
+                segment: "X",
+                comment: "Field doc comment.",
+                dedicatedLine: true,
+              },
+            }, {
+              commented: {
+                segment: "Y",
+                comment: "Field doc comment inline.",
+              },
+            }]}
+          />
+          <TupleStructDef
+            id={["Foo", "tupleStructItem9"]}
+            fields={[{
+              commented: {
+                segment: "X",
+                comment: "Field doc comment.",
+                dedicatedLine: true,
+              },
+            }, {
+              commented: {
+                segment: "Y",
+                comment: "Field doc comment inline.",
+              },
+            }]}
+            multilineFields
+          />
+          <TupleStructDef
+            id={["Foo", "tupleStructItem3"]}
+            fields={["X"]}
+            comment="Struct doc comment."
+          />
+          <TupleStructDef
+            id={["Foo", "tupleStructItem4"]}
+            generics={[{
+              id: ["S", "tupleStructItemArg10"],
+            }, {
+              id: ["T", "tupleStructItemArg11"],
+              bounds: ["Eq"],
+            }, {
+              id: ["U", "tupleStructItemArg12"],
+              bounds: ["Eq", "Ord"],
+            }, {
+              id: ["V", "tupleStructItemArg13"],
+              bounds: ["Eq", "Ord"],
+              multiline: true,
+            }]}
+            multilineGenerics
+            fields={[<R n="tupleStructItemArg10" />]}
+            comment="Struct doc comment."
+          />
+        </Pseudocode>
+
+        <P>
+          Enum definitions:
+        </P>
+
+        <Pseudocode n="enumItem" lineNumbering>
+          <Enum
+            id={["Foo", "enum0"]}
+            comment="Enum doc comment."
+            generics={[{
+              id: ["S", "enumArg10"],
+            }, {
+              id: ["T", "enumArg11"],
+              bounds: ["Eq"],
+            }, {
+              id: ["U", "enumArg12"],
+              bounds: ["Eq", "Ord"],
+            }, {
+              id: ["V", "enumArg13"],
+              bounds: ["Eq", "Ord"],
+              multiline: true,
+            }]}
+            multilineGenerics
+            variants={[
+              {
+                tuple: true,
+                id: ["UnitVariantWithoutDocComment", "enumVar0"],
+              },
+              {
+                tuple: true,
+                id: ["UnitVariant", "enumVar1"],
+                comment: "Unit variant doc comment.",
+              },
+              {
+                tuple: true,
+                id: ["TupleVariant", "enumVar2"],
+                comment: "Tuple variant doc comment.",
+                fields: [<R n="enumArg10" />, <R n="enumArg11" />],
+              },
+              {
+                id: ["StructVariant", "enumVar3"],
+                comment: "Struct variant doc comment.",
+                fields: [[["x", "enumVar31"], <R n="enumArg11" />], {
+                  commented: {
+                    segment: [["y", "enumVar32"], <R n="enumArg12" />],
+                    comment: "Field doc comment.",
+                    dedicatedLine: true,
+                  },
+                }, {
+                  commented: {
+                    segment: [["z", "enumVar33"], <R n="enumArg13" />],
+                    comment: "Field doc comment inline.",
+                  },
+                }],
+              },
+            ]}
+          />
+        </Pseudocode>
+      </Hsection>
     </Hsection>
   </ArticleTemplate>
 );
@@ -2437,5 +2663,3 @@ const exp = (
 // Evaluate the expression. This has exciting side-effects,
 // like creating a directory that contains a website!
 ctx.evaluate(exp);
-
-// generic parameters for function types (and literals?)
