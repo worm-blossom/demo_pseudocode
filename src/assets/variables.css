@@ -14,7 +14,7 @@
 :root {
     --font-body: 'Linux Libertine', Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
     --font-heading: var(--font-body);
-    --font-mono: 'Monaspace Neon'/*, ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono'*/, monospace;
+    --font-mono: 'Monaspace Neon', ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
 
     --default-spacing: 0.8rem;
 

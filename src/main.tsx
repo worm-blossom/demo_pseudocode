@@ -132,7 +132,7 @@ const exp = (
     abstract={
       <>
         <P>
-          Documentation for three Macromania packages for writing pseudocode.
+          Documentation for two Macromania packages for writing pseudocode.
           The <Code>macromania_pseudocode</Code>{" "}
           package provides low-level functionality such as rendering line
           numbers, indentatin, and comments. The <Code>macromania_rustic</Code>

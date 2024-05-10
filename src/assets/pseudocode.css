@@ -74,6 +74,8 @@ code.pseudocode {
             color: var(--pseudo-fg-slightly-muted);
             padding-left: calc(1ch - 2px);
 
+            font-family: 'Monaspace Xenon', ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+
             p:first-child {
                 margin-top: 0;
             }
@@ -92,6 +94,7 @@ code.pseudocode {
             border-right: dotted var(--pseudo-fg-muted) 2px;
             padding-left: calc(1ch - 2px);
             padding-right: calc(1ch - 2px);
+            font-family: 'Monaspace Xenon', ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
 
             color: var(--pseudo-fg-slightly-muted);
         }
