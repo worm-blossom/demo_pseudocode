@@ -58,6 +58,7 @@ import {
   Indent,
   Index,
   InlineComment,
+  Interface,
   IsVariant,
   Keyword,
   Land,
@@ -95,6 +96,7 @@ import {
   Return,
   Rs,
   Rsb,
+  Self,
   Sidenote,
   Sidenotes,
   Slice,
@@ -2652,6 +2654,64 @@ const exp = (
                   },
                 }],
               },
+            ]}
+          />
+        </Pseudocode>
+
+        <P>
+          Interface definitions:
+        </P>
+
+        <Pseudocode n="interfaceItem" lineNumbering>
+          <Interface
+            id={["Foo", "interface0"]}
+            comment="Interface doc comment."
+            generics={[{
+              id: ["S", "interfaceArg10"],
+            }, {
+              id: ["T", "interfaceArg11"],
+              bounds: ["Eq"],
+            }, {
+              id: ["U", "interfaceArg12"],
+              bounds: ["Eq", "Ord"],
+            }, {
+              id: ["V", "interfaceArg13"],
+              bounds: ["Eq", "Ord"],
+              multiline: true,
+            }]}
+            multilineGenerics
+            members={[
+              {
+                let: true,
+                comment: <>Comment for a let member. The <Self/> keyword refers to the type implementing the interface. Or at least, that is the intention. This is pseudocode after all, there are no well-defined semantics.</>,
+                id: ["someConstant", "interfaceM1"],
+                type: <Self />,
+              },
+              {
+                comment: "Comment for a function member.",
+                id: ["someFunction", "interfaceM2"],
+                generics: [{
+                  id: ["S", "interfaceM2A1"],
+                }],
+                args: [
+                  ["foo", "interfaceM2A53", <R n="interfaceM2A1"/>],
+                  {
+                    commented: {
+                      segment: ["bar", "interfaceM2A56", "B"],
+                      comment: "bla",
+                    },
+                  },
+                  {
+                    commented: {
+                      segment: ["baz", "interfaceM2A57", "C"],
+                      comment: "bli",
+                      dedicatedLine: true,
+                    },
+                  },
+                ],
+                ret: "Y",
+                multiline: true,
+              }
             ]}
           />
         </Pseudocode>

@@ -64,6 +64,7 @@ code.pseudocode {
             >.indent {
                 width: 4ch;
                 border-left: solid 1px var(--pseudo-fg-muted);
+                height: 100%;
             }
         }
 
