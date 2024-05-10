@@ -55,6 +55,7 @@ import {
   H,
   Hsection,
   If,
+  Impl,
   Indent,
   Index,
   InlineComment,
@@ -84,6 +85,7 @@ import {
   Pre,
   PreviewScope,
   Pseudocode,
+  QualifiedMember,
   R,
   RangeLiteral,
   Rb,
@@ -2683,7 +2685,14 @@ const exp = (
             members={[
               {
                 let: true,
-                comment: <>Comment for a let member. The <Self/> keyword refers to the type implementing the interface. Or at least, that is the intention. This is pseudocode after all, there are no well-defined semantics.</>,
+                comment: (
+                  <>
+                    Comment for a let member. The <Self />{" "}
+                    keyword refers to the type implementing the interface. Or at
+                    least, that is the intention. This is pseudocode after all,
+                    there are no well-defined semantics.
+                  </>
+                ),
                 id: ["someConstant", "interfaceM1"],
                 type: <Self />,
               },
@@ -2694,7 +2703,7 @@ const exp = (
                   id: ["S", "interfaceM2A1"],
                 }],
                 args: [
-                  ["foo", "interfaceM2A53", <R n="interfaceM2A1"/>],
+                  ["foo", "interfaceM2A53", <R n="interfaceM2A1" />],
                   {
                     commented: {
                       segment: ["bar", "interfaceM2A56", "B"],
@@ -2711,7 +2720,85 @@ const exp = (
                 ],
                 ret: "Y",
                 multiline: true,
-              }
+              },
+            ]}
+          />
+        </Pseudocode>
+
+        <P>
+          Interface implementation:
+        </P>
+
+        <Pseudocode n="implItem" lineNumbering>
+          <Impl
+            comment="Doc comment for the impl item."
+            generics={[{
+              id: ["S", "implArg10"],
+            }, {
+              id: ["T", "implArg11"],
+              bounds: ["Eq"],
+            }, {
+              id: ["U", "implArg12"],
+              bounds: ["Eq", "Ord"],
+            }, {
+              id: ["V", "implArg13"],
+              bounds: ["Eq", "Ord"],
+              multiline: true,
+            }]}
+            multilineGenerics
+            iface={
+              <TypeApplication
+                constr="interface0"
+                args={[
+                  <R n="implArg10" />,
+                  <R n="implArg11" />,
+                  <R n="implArg12" />,
+                  <R n="implArg13" />,
+                ]}
+              />
+            }
+            type="Bla"
+            members={[
+              {
+                let: true,
+                id: ["someConstant", "impl0"],
+                type: "Bla",
+                comment: "Doc comment for the implementation of a let member.",
+                children: "17",
+              },
+              {
+                id: ["someFunction", "impl1"],
+                comment:
+                  "Doc comment for the implementation of a function member.",
+                generics: [{
+                  id: ["S", "implM2A1"],
+                }],
+                args: [
+                  ["foo", "implM2A53", <R n="implM2A1" />],
+                  {
+                    commented: {
+                      segment: ["bar", "implM2A56", "B"],
+                      comment: "bla",
+                    },
+                  },
+                  {
+                    commented: {
+                      segment: ["baz", "implM2A57", "C"],
+                      comment: "bli",
+                      dedicatedLine: true,
+                    },
+                  },
+                ],
+                ret: "Y",
+                multilineArgs: true,
+                body: [
+                  <>
+                    <Return>
+                      <QualifiedMember type="Bla" member="impl0" />
+                    </Return>
+                  </>,
+                ],
+              },
             ]}
           />
         </Pseudocode>
