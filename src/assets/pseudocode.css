@@ -19,7 +19,7 @@ code.pseudocode {
     grid-template-columns: max-content 1fr;
 
     text-align: left;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     justify-self: start;
 
     margin: var(--default-spacing) 0;
@@ -97,7 +97,7 @@ code.pseudocode {
         }
     }
 
-    >.locContent:not(:has(div::nth-child(2))) {
+    >.locContent:not(:has(div:nth-child(2))) {
         grid-template-columns: auto;
     }
 
@@ -206,6 +206,7 @@ macromania_rustic
 
 .rustic {
     font-family: var(--font-mono);
+    font-size: 0.85rem;
 }
 
 .rustic.value {

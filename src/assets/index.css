@@ -4,7 +4,7 @@ Entrypoint for the main stylesheet.
 To tweak the appearence, change values in `variables.css`
 */
 @import "reset.css";
-@import "openSans.css";
+@import "textFonts.css";
 @import "layout.css";
 @import "variables.css";
 @import "authors.css";
@@ -190,7 +190,8 @@ code {
   font-family: var(--font-mono);
   background-color: var(--code-bg);
   border-radius: 4px;
-  padding: 0.05rem;
+  padding: 0.1rem;
+  font-size: 0.85em;
 }
 
 ul,

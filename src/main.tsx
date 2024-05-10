@@ -156,9 +156,8 @@ const exp = (
     >
       <P>
         The <Code>macromania_pseudocode</Code>{" "}
-        provides low-level facilities for pseudocode rendering. You probably
-        will not use it directly unless defining your own language constructs.
-        Still, cannot really hurt to learn what is going on under the hood.
+        provides low-level facilities for pseudocode rendering. You should know
+        about them in order to set things up correctly.
       </P>
 
       <P>
@@ -187,7 +186,7 @@ const exp = (
         <B>c</B>ode) macros as children. All content in the{" "}
         <Code>Pseudocode</Code> must be wrapped in <Code>Loc</Code>{" "}
         macros for the rendering to work out. The <Code>n</Code>{" "}
-        prop must be a unique name that can be sued for references to the code
+        prop must be a unique name that can be used for references to the code
         (demonstrated later).
       </P>
 
@@ -354,29 +353,12 @@ const exp = (
         each of them in their own, indented lines.
       </P>
 
-      <P>
-        Further, the <Code>Delimited</Code>{" "}
-        macro allows specifying different rendering styles for the delimiters,
-        that can be toggled via config options.
-      </P>
-
-      <P>
-        The following examples use the same <Code>Delimited</Code>{" "}
-        invocation, except for toggling the <Code>multiline</Code>{" "}
-        flag and for rendering in the three different pseudocode styles: C-like,
-        Python-like, and Ruby-like.
-      </P>
-
-      <P>Single line, C-style.</P>
-
       <Pseudocode n="delimitedSinglelineC" lineNumbering>
         <Loc>
           if true{" "}
           <Delimited
             separator=";"
-            c={["{", "}"]}
-            pythonSkip
-            ruby={["then", "endif"]}
+            delims={["{", "}"]}
             content={["foo()", {
               commented: { segment: "bar()", comment: "bla" },
             }, {
@@ -390,8 +372,6 @@ const exp = (
           else foo;
         </Loc>
       </Pseudocode>
-
-      <P>Multiple lines, C-style.</P>
 
       <Pseudocode n="delimitedMultilineC" lineNumbering>
         <Loc>
@@ -399,9 +379,7 @@ const exp = (
           <Delimited
             multiline
             separator=";"
-            c={["{", "}"]}
-            pythonSkip
-            ruby={["then", "endif"]}
+            delims={["{", "}"]}
             content={["foo()", {
               commented: { segment: "bar()", comment: "bla" },
             }, {
@@ -415,108 +393,6 @@ const exp = (
           else foo;
         </Loc>
       </Pseudocode>
-
-      <Config options={[<ConfigPseudocode delimiterStyle="python" />]}>
-        <P>Single line, Python-style.</P>
-
-        <Pseudocode n="delimitedSinglelinePython" lineNumbering>
-          <Loc>
-            if true{" "}
-            <Delimited
-              separator=";"
-              c={["{", "}"]}
-              pythonSkip
-              ruby={["then", "endif"]}
-              content={["foo()", {
-                commented: { segment: "bar()", comment: "bla" },
-              }, {
-                commented: {
-                  segment: "baz()",
-                  comment: "bli",
-                  dedicatedLine: true,
-                },
-              }]}
-            />{" "}
-            else foo;
-          </Loc>
-        </Pseudocode>
-
-        <P>Multiple lines, Python-style.</P>
-
-        <Pseudocode n="delimitedMultilinePython" lineNumbering>
-          <Loc>
-            if true{" "}
-            <Delimited
-              multiline
-              separator=";"
-              c={["{", "}"]}
-              pythonSkip
-              ruby={["then", "endif"]}
-              content={["foo()", {
-                commented: { segment: "bar()", comment: "bla" },
-              }, {
-                commented: {
-                  segment: "baz()",
-                  comment: "bli",
-                  dedicatedLine: true,
-                },
-              }]}
-            />{" "}
-            else foo;
-          </Loc>
-        </Pseudocode>
-      </Config>
-
-      <Config options={[<ConfigPseudocode delimiterStyle="ruby" />]}>
-        <P>Single line, Ruby-style.</P>
-
-        <Pseudocode n="delimitedSinglelineRuby" lineNumbering>
-          <Loc>
-            if true{" "}
-            <Delimited
-              separator=";"
-              c={["{", "}"]}
-              pythonSkip
-              ruby={["then", "endif"]}
-              content={["foo()", {
-                commented: { segment: "bar()", comment: "bla" },
-              }, {
-                commented: {
-                  segment: "baz()",
-                  comment: "bli",
-                  dedicatedLine: true,
-                },
-              }]}
-            />{" "}
-            else foo;
-          </Loc>
-        </Pseudocode>
-
-        <P>Multiple lines, Ruby-style.</P>
-
-        <Pseudocode n="delimitedMultilineRuby" lineNumbering>
-          <Loc>
-            if true{" "}
-            <Delimited
-              multiline
-              separator=";"
-              c={["{", "}"]}
-              pythonSkip
-              ruby={["then", "endif"]}
-              content={["foo()", {
-                commented: { segment: "bar()", comment: "bla" },
-              }, {
-                commented: {
-                  segment: "baz()",
-                  comment: "bli",
-                  dedicatedLine: true,
-                },
-              }]}
-            />{" "}
-            else foo;
-          </Loc>
-        </Pseudocode>
-      </Config>
 
       <P>
         The <Code>Keyword</Code> macro renders a keyword, the{" "}
@@ -558,11 +434,6 @@ const exp = (
         type definitions and interfaces (though none of them get typechecked).
         The level of expressivity of the pseudo-type system corresponds roughly
         to that of Rust without lifetimes.
-      </P>
-
-      <P>
-        All examples we show here are rendered using C-style braces, but
-        everything also works for Python-style and Ruby-style syntax.
       </P>
 
       <P>

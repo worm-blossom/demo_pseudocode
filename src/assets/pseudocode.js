@@ -17,9 +17,6 @@ const searchParams = new URLSearchParams(urlParams);
 
 const defaulthlLinesString = searchParams.get("hlLines") ?? null;
 const defaultN = searchParams.get("hlPseudocode") ?? "";
-console.log(defaulthlLinesString);
-console.log(defaultN);
-console.log(urlParams);
 
 applyStyles(defaulthlLinesString, defaultN);
 
